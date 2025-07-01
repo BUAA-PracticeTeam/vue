@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+body {
+  background-color: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+  padding-top: 80px; /* 为固定导航栏留出空间 */
+  border: none !important; /* 清除浏览器可能添加的默认边框 */
+  margin: 0;
+}
+
+.container {
+  max-width: 1700px;
+  margin: 0 1px;
+  padding: 0 20px;
+}
+
+main {
+  min-height: calc(100vh - 180px); /* 页脚留白 */
+}
