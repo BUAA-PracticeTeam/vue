@@ -21,6 +21,7 @@ export const useUserStore = defineStore(
       avatar: '',
       introduction: '',
       photo: '',
+      work: '',
       permission: 0,
     })
 
@@ -50,6 +51,7 @@ export const useUserStore = defineStore(
         avatar: '',
         introduction: '',
         photo: '',
+        work: '',
         permission: 0,
       }
     }
@@ -77,6 +79,7 @@ export const useUserStore = defineStore(
           avatar: userData.avatar,
           introduction: userData.introduction,
           photo: userData.photo,
+          work: userData.work,
           permission: userData.permission,
         })
 
@@ -131,6 +134,9 @@ export const useUserStore = defineStore(
           username: userInfo.username,
           nickname: userInfo.nickname,
           email: userInfo.email,
+          signature: userInfo.signature,
+          introduction: userInfo.introduction,
+          work: userInfo.work,
         })
 
         message.success('修改成功')
