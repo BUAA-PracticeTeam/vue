@@ -1,4 +1,4 @@
-name: Deploy Vue to Alibaba Cloud
+name: Deploy Vue to Alibaba Cloud (pnpm)
 
 on:
   push:
@@ -11,18 +11,27 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      # 安装 pnpm
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8 # 指定pnpm版本（与本地一致）
+
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'npm'
+          cache: 'pnpm' # 启用pnpm专属缓存
 
+      # 安装依赖（使用pnpm）
       - name: Install dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile # 严格依赖lockfile
 
+      # 构建项目
       - name: Build project
-        run: npm run build
+        run: pnpm run build
 
+      # 部署到阿里云
       - name: Deploy to Server
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -31,9 +40,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
-            # 清空目标目录
             rm -rf /www/wwwroot/47.93.81.21/BUAA-PracticeTeam/*
-            # 移动构建文件
             mv /home/runner/work/Vue/Vue/dist/* /www/wwwroot/47.93.81.21/BUAA-PracticeTeam/
-            # 重启Nginx
             sudo systemctl restart nginx
