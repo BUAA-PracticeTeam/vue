@@ -206,20 +206,20 @@ const submitForm = async () => {
 .profile-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 30px;
-  margin-bottom: 30px;
+  gap: 25px;
+  margin-bottom: 25px;
 }
 
 .left-panel,
 .right-panel {
-  min-height: 500px;
+  min-height: 400px;
 }
 
 .panel-card {
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  padding: 30px;
+  padding: 25px;
   height: 100%;
   transition: all 0.3s ease;
 }
@@ -230,11 +230,11 @@ const submitForm = async () => {
 }
 
 .panel-title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   color: #303133;
-  margin: 0 0 30px 0;
-  padding-bottom: 15px;
+  margin: 0 0 20px 0;
+  padding-bottom: 12px;
   border-bottom: 3px solid #409eff;
   display: flex;
   align-items: center;
@@ -248,7 +248,7 @@ const submitForm = async () => {
 
 .basic-form,
 .intro-form {
-  height: calc(100% - 80px);
+  height: calc(100% - 70px);
 }
 
 .form-input {
@@ -288,7 +288,7 @@ const submitForm = async () => {
   display: flex;
   gap: 20px;
   justify-content: center;
-  padding: 30px;
+  padding: 25px;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -365,7 +365,7 @@ const submitForm = async () => {
 
 /* 表单项样式优化 */
 :deep(.el-form-item) {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 :deep(.el-form-item__label) {
