@@ -1,20 +1,35 @@
 <script setup>
 import PageContainer from '@/components/PageContainer.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useUserStore } from '@/stores/modules/user.js'
-import { ElMessage } from 'element-plus'
-import { userUpdateInfoService } from '@/api/user'
 
 const formRef = ref()
 const userStore = useUserStore()
-const user = userStore.getUser()
-const { username, nickname, email } = user
 
+// 使用计算属性从 store 获取用户信息
+const user = computed(() => userStore.getUser())
+const username = computed(() => user.value.username)
+const nickname = computed(() => user.value.nickname)
+const email = computed(() => user.value.email)
+
+// 创建响应式的表单数据
 const form = ref({
-  username,
-  nickname,
-  email,
+  username: '',
+  nickname: '',
+  email: '',
 })
+
+// 监听用户信息变化，更新表单数据
+const updateFormFromStore = () => {
+  form.value = {
+    username: username.value,
+    nickname: nickname.value,
+    email: email.value,
+  }
+}
+
+// 初始化表单数据
+updateFormFromStore()
 
 const rules = ref({
   nickname: [
@@ -36,13 +51,14 @@ const rules = ref({
 })
 
 const submitForm = async () => {
-  // ElMessage.warning('请先登录')
   // 等待校验结果
   await formRef.value.validate()
-  // 提交修改
-  await userUpdateInfoService(form.value)
-  // 提示用户
-  ElMessage.success('修改成功')
+  // 调用 store 中的更新方法
+  const result = await userStore.updateUserInfo(form.value)
+  if (result.success) {
+    // 更新成功后的处理逻辑可以在这里添加
+    console.log('用户信息更新成功')
+  }
 }
 </script>
 <template>

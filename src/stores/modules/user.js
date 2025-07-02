@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { userLoginService, userRegisterService } from '@/api/user.js'
+import { userLoginService, userRegisterService, userUpdateInfoService } from '@/api/user.js'
 import { message } from 'ant-design-vue'
 
 export const useUserStore = defineStore(
@@ -111,6 +111,33 @@ export const useUserStore = defineStore(
       }
     }
 
+    // 更新用户信息业务逻辑
+    const updateUserInfo = async (userInfo) => {
+      try {
+        const response = await userUpdateInfoService(userInfo)
+
+        if (response.data.error_num) {
+          message.error(response.data.msg)
+          return { success: false, message: response.data.msg }
+        }
+
+        // 更新本地用户信息
+        setUser({
+          username: userInfo.username,
+          nickname: userInfo.nickname,
+          email: userInfo.email,
+        })
+
+        message.success('修改成功')
+        return { success: true, message: '修改成功' }
+      } catch (error) {
+        console.error('更新用户信息失败:', error)
+        const errorMsg = '更新失败，请稍后重试'
+        message.error(errorMsg)
+        return { success: false, message: errorMsg }
+      }
+    }
+
     return {
       user,
       loginLoading,
@@ -120,8 +147,10 @@ export const useUserStore = defineStore(
       clearUser,
       login,
       register,
+      updateUserInfo,
     }
   },
+
   {
     persist: {
       key: 'user-data', // 自定义存储键名
