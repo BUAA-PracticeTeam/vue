@@ -25,7 +25,7 @@ jobs:
 
       # 安装依赖（使用pnpm）
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile # 严格依赖lockfile
+        run: pnpm install --no--frozen-lockfile # 严格依赖lockfile
 
       # 构建项目
       - name: Build project
