@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { userLoginService, userRegisterService, userUpdateInfoService } from '@/api/user.js'
+import {
+  userLoginService,
+  userRegisterService,
+  userUpdateInfoService,
+  userUpdateAvatarService,
+} from '@/api/user.js'
 import { message } from 'ant-design-vue'
 
 export const useUserStore = defineStore(
@@ -138,6 +143,29 @@ export const useUserStore = defineStore(
       }
     }
 
+    // 更新用户头像业务逻辑
+    const updateAvatar = async (avatarUrl) => {
+      try {
+        const response = await userUpdateAvatarService(avatarUrl, user.value.username)
+
+        if (response.data.error_num) {
+          message.error(response.data.msg)
+          return { success: false, message: response.data.msg }
+        }
+
+        // 更新本地用户头像
+        setUser({ avatar: avatarUrl })
+
+        message.success('头像更新成功')
+        return { success: true, message: '头像更新成功' }
+      } catch (error) {
+        console.error('更新头像失败:', error)
+        const errorMsg = '头像更新失败，请稍后重试'
+        message.error(errorMsg)
+        return { success: false, message: errorMsg }
+      }
+    }
+
     return {
       user,
       loginLoading,
@@ -148,6 +176,7 @@ export const useUserStore = defineStore(
       login,
       register,
       updateUserInfo,
+      updateAvatar,
     }
   },
 
