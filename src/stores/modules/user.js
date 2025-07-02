@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { userLoginService, userRegisterService } from '@/api/user.js'
+import { message } from 'ant-design-vue'
 
 export const useUserStore = defineStore(
   'user',
@@ -14,8 +16,12 @@ export const useUserStore = defineStore(
       avatar: '',
       introduction: '',
       photo: '',
-      permission: 0
+      permission: 0,
     })
+
+    // 加载状态
+    const loginLoading = ref(false)
+    const registerLoading = ref(false)
 
     // 获取完整用户信息
     const getUser = () => {
@@ -39,21 +45,87 @@ export const useUserStore = defineStore(
         avatar: '',
         introduction: '',
         photo: '',
-        permission: 0
+        permission: 0,
+      }
+    }
+
+    // 登录业务逻辑
+    const login = async (loginData) => {
+      loginLoading.value = true
+
+      try {
+        const response = await userLoginService(loginData)
+
+        if (response.data.error_num) {
+          message.error(response.data.msg)
+          return { success: false, message: response.data.msg }
+        }
+
+        // 使用 Pinia store 存储认证信息
+        const userData = response.data.user
+        setUser({
+          username: userData.username,
+          nickname: userData.nickname,
+          email: userData.email,
+          signature: userData.signature,
+          password: userData.password,
+          avatar: userData.avatar,
+          introduction: userData.introduction,
+          photo: userData.photo,
+          permission: userData.permission,
+        })
+
+        message.success('登录成功')
+        return { success: true, message: '登录成功' }
+      } catch (error) {
+        console.error('登录失败:', error)
+        const errorMsg = '登录失败，请检查用户名和密码'
+        message.error(errorMsg)
+        return { success: false, message: errorMsg }
+      } finally {
+        loginLoading.value = false
+      }
+    }
+
+    // 注册业务逻辑
+    const register = async (registerData) => {
+      registerLoading.value = true
+
+      try {
+        const response = await userRegisterService(registerData)
+
+        if (response.data.error_num) {
+          message.error(response.data.msg)
+          return { success: false, message: response.data.msg }
+        }
+
+        message.success('注册成功')
+        return { success: true, message: '注册成功' }
+      } catch (error) {
+        console.error('注册失败:', error)
+        const errorMsg = '注册失败，请稍后重试'
+        message.error(errorMsg)
+        return { success: false, message: errorMsg }
+      } finally {
+        registerLoading.value = false
       }
     }
 
     return {
       user,
+      loginLoading,
+      registerLoading,
       getUser,
       setUser,
-      clearUser
+      clearUser,
+      login,
+      register,
     }
   },
   {
     persist: {
       key: 'user-data', // 自定义存储键名
-      paths: ['user']   // 仅持久化 user 字段
-    }
-  }
+      paths: ['user'], // 仅持久化 user 字段
+    },
+  },
 )

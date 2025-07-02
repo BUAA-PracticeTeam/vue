@@ -3,7 +3,7 @@ import PageContainer from '@/components/PageContainer.vue'
 import { ref } from 'vue'
 import { useUserStore } from '@/stores/modules/user.js'
 import { ElMessage } from 'element-plus'
-// import { userUpdateInfoService } from '@/api/user'
+import { userUpdateInfoService } from '@/api/user'
 
 const formRef = ref()
 const userStore = useUserStore()
@@ -36,10 +36,11 @@ const rules = ref({
 })
 
 const submitForm = async () => {
+  // ElMessage.warning('请先登录')
   // 等待校验结果
   await formRef.value.validate()
   // 提交修改
-  // await userUpdateInfoService(form.value)
+  await userUpdateInfoService(form.value)
   // 提示用户
   ElMessage.success('修改成功')
 }

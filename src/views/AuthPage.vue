@@ -1,9 +1,7 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/modules/user.js'
-import { userLoginService, userRegisterService } from '@/api/user.js'
-import { message } from 'ant-design-vue'
 import { defineOptions } from 'vue'
 
 defineOptions({
@@ -42,9 +40,9 @@ const signUpErrors = ref({
   confirmPassword: '',
 })
 
-// 加载状态
-const signInLoading = ref(false)
-const signUpLoading = ref(false)
+// 加载状态 - 从 store 获取
+const signInLoading = computed(() => userStore.loginLoading)
+const signUpLoading = computed(() => userStore.registerLoading)
 
 // 切换登录/注册面板
 const toggleSignUp = (active) => {
@@ -131,40 +129,13 @@ const validateSignUpForm = () => {
 const handleSignIn = async () => {
   if (!validateSignInForm()) return
 
-  signInLoading.value = true
+  const result = await userStore.login({
+    username: signInForm.value.username,
+    password: signInForm.value.password,
+  })
 
-  try {
-    const response = await userLoginService({
-      username: signInForm.value.username,
-      password: signInForm.value.password,
-    })
-
-    // 使用 Pinia store 存储认证信息
-    const user = response.data.user
-    userStore.setUser({
-      username: user.username,
-      nickname: user.nickname,
-      email: user.email,
-      signature: user.signature,
-      password: user.password,
-      avatar: user.avatar,
-      introduction: user.introduction,
-      photo: user.photo,
-      permission: user.permission,
-    })
-
-    if (response.data.error_num) {
-      message.error(response.data.msg)
-    } else {
-      router.push('/about')
-      message.success('登录成功')
-    }
-  } catch (error) {
-    console.error('登录失败:', error)
-    const errorMsg = '登录失败，请检查用户名和密码'
-    message.error(errorMsg)
-  } finally {
-    signInLoading.value = false
+  if (result.success) {
+    router.push('/about')
   }
 }
 
@@ -172,34 +143,22 @@ const handleSignIn = async () => {
 const handleSignUp = async () => {
   if (!validateSignUpForm()) return
 
-  signUpLoading.value = true
+  const result = await userStore.register({
+    username: signUpForm.value.username,
+    email: signUpForm.value.email,
+    password: signUpForm.value.password,
+  })
 
-  try {
-    const response = await userRegisterService({
-      username: signUpForm.value.username,
-      email: signUpForm.value.email,
-      password: signUpForm.value.password,
-    })
-
-    if (response.data.error_num) {
-      message.error(response.data.msg)
-    } else {
-      message.success('注册成功')
-      // 注册成功后切换到登录面板
-      isSignUpActive.value = false
-      // 清空注册表单
-      signUpForm.value = {
-        username: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-      }
+  if (result.success) {
+    // 注册成功后切换到登录面板
+    isSignUpActive.value = false
+    // 清空注册表单
+    signUpForm.value = {
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     }
-  } catch (error) {
-    console.error('注册失败:', error)
-    message.error('注册失败，请稍后重试')
-  } finally {
-    signUpLoading.value = false
   }
 }
 </script>

@@ -8,10 +8,6 @@ export const userRegisterService = ({ username, email, password }) =>
 export const userLoginService = ({ username, password }) =>
   request.post('/api/login/', { username, password })
 
-// 更新用户基本信息
-export const userUpdateInfoService = ({ id, nickname, username }) =>
-  request.put('/my/userinfo', { id, nickname, username })
-
 // 更新用户头像
 export const userUpdateAvatarService = (avatar, username) =>
   request.patch('/my/update/avatar', { avatar, username })
@@ -19,3 +15,7 @@ export const userUpdateAvatarService = (avatar, username) =>
 // 更新用户密码
 export const userUpdatePasswordService = ({ old_pwd, new_pwd, username }) =>
   request.patch('/my/update/pwd', { old_pwd, new_pwd, username })
+
+// 更新用户基本信息
+export const userUpdateInfoService = ({ username, nickname, email }) =>
+  request.patch('/my/update/user_info', { username, nickname, email })
