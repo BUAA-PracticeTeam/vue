@@ -41,4 +41,4 @@ jobs:
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
             find /www/wwwroot/47.93.81.21/BUAA-PracticeTeam/ -type f -not -name '.user.ini' -delete
-            mv /home/runner/work/vue/vue/dist/* /www/wwwroot/47.93.81.21/BUAA-PracticeTeam/
+            mv ./dist/* /www/wwwroot/47.93.81.21/BUAA-PracticeTeam/
