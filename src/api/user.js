@@ -17,5 +17,19 @@ export const userUpdatePasswordService = ({ old_pwd, new_pwd, username }) =>
   request.patch('/my/update/pwd', { old_pwd, new_pwd, username })
 
 // 更新用户基本信息
-export const userUpdateInfoService = ({ username, nickname, email }) =>
-  request.patch('/my/update/user_info', { username, nickname, email })
+export const userUpdateInfoService = ({
+  username,
+  nickname,
+  email,
+  signature,
+  introduction,
+  work,
+}) =>
+  request.patch('/my/update/user_info', {
+    username,
+    nickname,
+    email,
+    signature,
+    introduction,
+    work,
+  })

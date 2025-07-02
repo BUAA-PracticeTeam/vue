@@ -3,7 +3,6 @@ import About from '../views/About.vue'
 import Team from '../views/Team.vue'
 import Gallery from '../views/Gallery.vue'
 import Forum from '../views/Forum.vue'
-import Register from '../views/Register.vue'
 import PersonalCenter from '../views/PersonalCenter.vue'
 import AuthPage from '../views/AuthPage.vue'
 
@@ -24,11 +23,6 @@ const router = createRouter({
       path: '/auth',
       name: 'AuthPage',
       component: AuthPage,
-    },
-    {
-      path: '/register',
-      name: 'RegisterPage',
-      component: Register,
     },
     {
       path: '/about',

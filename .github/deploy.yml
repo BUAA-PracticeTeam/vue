@@ -1,0 +1,39 @@
+name: Deploy Vue to Alibaba Cloud
+
+on:
+  push:
+    branches: ['release']
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: '47.93.81.21'
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_SSH_PORT }}
+          script: |
+            # 清空目标目录
+            rm -rf /www/wwwroot/47.93.81.21/BUAA-PracticeTeam/*
+            # 移动构建文件
+            mv /home/runner/work/Vue/Vue/dist/* /www/wwwroot/47.93.81.21/BUAA-PracticeTeam/
+            # 重启Nginx
+            sudo systemctl restart nginx
