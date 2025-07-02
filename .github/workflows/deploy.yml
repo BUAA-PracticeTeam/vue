@@ -40,6 +40,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
-            rm -rf /www/wwwroot/47.93.81.21/BUAA-PracticeTeam/*
-            mv /home/runner/work/Vue/Vue/dist/* /www/wwwroot/47.93.81.21/BUAA-PracticeTeam/
-            sudo systemctl restart nginx
+            find /www/wwwroot/47.93.81.21/BUAA-PracticeTeam/ -type f -not -name '.user.ini' -delete
+            mv /github/workspace/dist/* /www/wwwroot/47.93.81.21/BUAA-PracticeTeam/
+            sudo nginx -t && sudo systemctl restart nginx
