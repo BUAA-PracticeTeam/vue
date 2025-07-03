@@ -12,9 +12,8 @@ const visibleDrawer = ref(false)
 
 // 默认数据
 const defaultForm = {
+  id: '', // 新增id字段，保证编辑时有id
   title: '', // 标题
-  cate_id: '', // 分类id
-  cover_img: '', // 封面图片 file 对象
   content: '', // string 内容
   state: '', // 状态
 }
@@ -75,18 +74,14 @@ const open = async (row) => {
   if (row.id) {
     // 需要基于 row.id 发送请求，获取编辑对应的详情数据，进行回显
     const res = await artGetDetailService(row.id)
-    formModel.value = res.data.data
-    // 修正：后端返回cover字段，赋值给cover_img
+    // 合并defaultForm和后端返回，保证id字段不丢失
+    formModel.value = { ...defaultForm, ...res.data.data }
     formModel.value.cover_img = res.data.data.cover
-    // 图片需要单独处理回显
     imgUrl.value = formModel.value.cover_img
-    // 注意：提交给后台，需要的数据格式，是file对象格式
-    // 需要将网络图片地址 => 转换成 file对象，存储起来, 将来便于提交
     const file = await imageUrlToFileObject(imgUrl.value, 'cover.jpg')
     formModel.value.cover_img = file
   } else {
-    formModel.value = { ...defaultForm } // 基于默认的数据，重置form数据
-    // 这里重置了表单的数据，但是图片上传img地址，富文本编辑器内容 => 需要手动重置
+    formModel.value = { ...defaultForm }
     imgUrl.value = ''
     editorRef.value.setHTML('')
   }
