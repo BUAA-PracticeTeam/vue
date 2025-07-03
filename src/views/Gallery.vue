@@ -2,8 +2,10 @@
 import { ref } from 'vue'
 import { defineOptions } from 'vue'
 import { artGetListService } from '@/api/article'
+import { useRouter } from 'vue-router'
 
 const galleryItems = ref([])
+const router = useRouter()
 
 // 动态获取后端所有文章
 const fetchGalleryArticles = async () => {
@@ -17,6 +19,7 @@ const fetchGalleryArticles = async () => {
       image: item.cover,
       pub_date: item.pub_date,
       author: item.author && item.author.nickname ? item.author.nickname : '',
+      id: item.id,
     }))
 }
 
@@ -41,6 +44,10 @@ const closeModal = () => {
   document.body.style.overflow = 'auto'
 }
 
+const goToArticle = (id) => {
+  router.push(`/article/${id}`)
+}
+
 // 设置组件名称（Vue 3.3+）
 defineOptions({
   name: 'GalleryPage',
@@ -58,7 +65,7 @@ defineOptions({
           class="gallery-item"
           v-for="(item, index) in galleryItems"
           :key="index"
-          @click="showGalleryModal(index)"
+          @click="goToArticle(item.id)"
         >
           <template v-if="item.image">
             <img :src="item.image" :alt="item.title" />

@@ -5,6 +5,7 @@ import Gallery from '../views/Gallery.vue'
 import Forum from '../views/Forum.vue'
 import PersonalCenter from '../views/PersonalCenter.vue'
 import AuthPage from '../views/AuthPage.vue'
+import ArticleDetail from '@/views/article/ArticleDetail.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -67,6 +68,11 @@ const router = createRouter({
           component: () => import('@/views/user/UserPassword.vue'),
         },
       ],
+    },
+    {
+      path: '/article/:id',
+      name: 'ArticleDetail',
+      component: ArticleDetail,
     },
   ],
 })
