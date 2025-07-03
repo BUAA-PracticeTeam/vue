@@ -111,38 +111,63 @@ const onSuccess = (type) => {
       </el-form-item>
     </el-form>
 
-    <!-- 表格区域 -->
-    <el-table :data="articleList" v-loading="loading">
-      <el-table-column label="文章标题" prop="title">
-        <template #default="{ row }">
-          <el-link type="primary" :underline="false">{{ row.title }}</el-link>
-        </template>
-      </el-table-column>
-      <el-table-column label="发表时间" prop="pub_date">
-        <template #default="{ row }">
-          {{ formatTime(row.pub_date) }}
-        </template>
-      </el-table-column>
-      <el-table-column label="状态" prop="state"></el-table-column>
-      <el-table-column label="操作">
-        <template #default="{ row }">
-          <el-button
-            circle
-            plain
-            type="primary"
-            :icon="Edit"
-            @click="onEditArticle(row)"
-          ></el-button>
-          <el-button
-            circle
-            plain
-            type="danger"
-            :icon="Delete"
-            @click="onDeleteArticle(row)"
-          ></el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <!-- 卡片式文章列表 -->
+    <el-row :gutter="20" style="margin-top: 10px">
+      <el-col
+        v-for="row in articleList"
+        :key="row.id"
+        :xs="24"
+        :sm="12"
+        :md="8"
+        :lg="8"
+        style="margin-bottom: 20px"
+      >
+        <el-card
+          shadow="hover"
+          class="article-card"
+          :style="row.cover ? { backgroundImage: `url(${row.cover})` } : {}"
+        >
+          <div class="card-overlay">
+            <div class="card-title">{{ row.title }}</div>
+            <div class="card-content">
+              <div
+                class="card-abstract"
+                v-html="
+                  row.content
+                    ? row.content.replace(/<[^>]+>/g, '').slice(0, 60) +
+                      (row.content.length > 60 ? '...' : '')
+                    : ''
+                "
+              ></div>
+            </div>
+            <div class="card-footer">
+              <span class="state-tag" :class="row.state === '已发布' ? 'published' : 'draft'">{{
+                row.state
+              }}</span>
+              <span class="pub-date">{{ formatTime(row.pub_date) }}</span>
+              <div class="card-actions">
+                <el-button
+                  circle
+                  plain
+                  type="primary"
+                  :icon="Edit"
+                  @click="onEditArticle(row)"
+                  size="small"
+                ></el-button>
+                <el-button
+                  circle
+                  plain
+                  type="danger"
+                  :icon="Delete"
+                  @click="onDeleteArticle(row)"
+                  size="small"
+                ></el-button>
+              </div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
 
     <!-- 分页区域 -->
     <el-pagination
@@ -162,4 +187,90 @@ const onSuccess = (type) => {
   </page-container>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.article-card {
+  display: flex;
+  flex-direction: column;
+  height: 240px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px #e6e6e6;
+  transition: box-shadow 0.2s;
+  &:hover {
+    box-shadow: 0 6px 24px #d0d0d0;
+  }
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.38);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+    padding: 18px 18px 12px 18px;
+  }
+  .card-title {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    text-shadow:
+      0 2px 8px #222,
+      0 1px 0 #000;
+    letter-spacing: 1px;
+    line-height: 1.3;
+    word-break: break-all;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .card-content,
+  .card-footer {
+    position: relative;
+    z-index: 3;
+  }
+  .card-content {
+    color: #f3f3f3;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    min-height: 32px;
+    text-shadow: 0 1px 4px #222;
+  }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .state-tag {
+      font-size: 0.95rem;
+      padding: 2px 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.85);
+      color: #1890ff;
+      font-weight: bold;
+      &.draft {
+        color: #faad14;
+      }
+    }
+    .pub-date {
+      color: #eee;
+      font-size: 0.92rem;
+      margin-left: 10px;
+      text-shadow: 0 1px 4px #222;
+    }
+    .card-actions {
+      display: flex;
+      gap: 8px;
+    }
+  }
+}
+</style>
