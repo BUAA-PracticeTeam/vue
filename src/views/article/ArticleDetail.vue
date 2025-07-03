@@ -212,6 +212,21 @@ onMounted(() => {
   color: #333;
   line-height: 1.8;
   word-break: break-word;
+  text-align: left !important;
+}
+/* 强制所有正文内元素左对齐，防止富文本带来的居中 */
+.main-content-body * {
+  text-align: left !important;
+}
+:deep(.main-content-body p) {
+  text-indent: 2em !important;
+  text-align: left !important;
+}
+:deep(.main-content-body img) {
+  display: block;
+  margin: 1.2em auto;
+  max-width: 100%;
+  height: auto;
 }
 
 .skeleton-layout .sidebar,
