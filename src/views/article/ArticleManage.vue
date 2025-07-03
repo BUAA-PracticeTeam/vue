@@ -16,7 +16,6 @@ const loading = ref(true) // loading状态
 const params = ref({
   pagenum: 1, // 当前页
   pagesize: 5, // 当前生效的每页条数
-  cate_id: '',
   state: '',
 })
 
@@ -54,7 +53,6 @@ const onSearch = () => {
 // 重置逻辑 => 将筛选条件清空，重新检索，从第一页开始展示
 const onReset = () => {
   params.value.pagenum = 1 // 重置页面
-  params.value.cate_id = ''
   params.value.state = ''
   getArticleList()
 }
@@ -76,7 +74,6 @@ const onDeleteArticle = async (row) => {
     cancelButtonText: '取消',
     type: 'warning',
   })
-  // 这里直接调用全局store的删除方法也可以，假设接口会校验作者
   await myArticleStore.fetchMyArticles(params.value) // 重新拉取列表
   ElMessage.success('删除成功')
   getArticleList()
@@ -101,7 +98,6 @@ const onSuccess = (type) => {
     <!-- 表单区域 -->
     <el-form inline>
       <el-form-item label="发布状态:">
-        <!-- 这里后台标记发布状态，就是通过中文标记的，已发布 / 草稿 -->
         <el-select v-model="params.state">
           <el-option label="已发布" value="已发布"></el-option>
           <el-option label="草稿" value="草稿"></el-option>
@@ -120,14 +116,12 @@ const onSuccess = (type) => {
           <el-link type="primary" :underline="false">{{ row.title }}</el-link>
         </template>
       </el-table-column>
-      <el-table-column label="分类" prop="cate_name"></el-table-column>
       <el-table-column label="发表时间" prop="pub_date">
         <template #default="{ row }">
           {{ formatTime(row.pub_date) }}
         </template>
       </el-table-column>
       <el-table-column label="状态" prop="state"></el-table-column>
-      <!-- 利用作用域插槽 row 可以获取当前行的数据 => v-for 遍历 item -->
       <el-table-column label="操作">
         <template #default="{ row }">
           <el-button
