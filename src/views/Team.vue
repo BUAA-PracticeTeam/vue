@@ -1,6 +1,7 @@
 <script setup>
-import { onMounted, computed } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useTeamStore } from '@/stores/modules/team.js'
+import TeamMemberDetail from '@/components/TeamMemberDetail.vue'
 import { defineOptions } from 'vue'
 
 defineOptions({
@@ -12,6 +13,18 @@ const teamStore = useTeamStore()
 // 使用计算属性获取团队成员数据
 const teamMembers = computed(() => teamStore.teamMembers)
 const loading = computed(() => teamStore.loading)
+
+const detailVisible = ref(false)
+const selectedMember = ref(null)
+
+function showMemberDetail(member) {
+  selectedMember.value = member
+  detailVisible.value = true
+}
+function closeDetail() {
+  detailVisible.value = false
+  selectedMember.value = null
+}
 
 // 组件挂载时获取团队成员数据
 onMounted(async () => {
@@ -35,7 +48,13 @@ onMounted(async () => {
 
       <!-- 团队成员列表 -->
       <div v-else-if="teamMembers.length > 0" class="team-members">
-        <div class="member-card" v-for="member in teamMembers" :key="member.id">
+        <div
+          class="member-card"
+          v-for="member in teamMembers"
+          :key="member.id"
+          @click="showMemberDetail(member)"
+          style="cursor: pointer"
+        >
           <div class="member-image">
             <img :src="member.photo" :alt="member.nickname || member.username" />
           </div>
@@ -52,6 +71,7 @@ onMounted(async () => {
         <el-empty description="暂无团队成员信息" />
       </div>
     </div>
+    <TeamMemberDetail :visible="detailVisible" :member="selectedMember" @close="closeDetail" />
   </div>
 </template>
 
