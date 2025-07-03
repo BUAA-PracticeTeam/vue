@@ -1,11 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { artGetDetailService } from '@/api/article'
 import { ElSkeleton, ElIcon } from 'element-plus'
 import { View, Pointer } from '@element-plus/icons-vue'
 
 const route = useRoute()
+const router = useRouter()
 const article = ref(null)
 const loading = ref(true)
 
@@ -24,6 +25,10 @@ const fetchArticle = async () => {
 onMounted(() => {
   fetchArticle()
 })
+
+const goBack = () => {
+  router.back()
+}
 </script>
 
 <template>
@@ -45,6 +50,7 @@ onMounted(() => {
           </aside>
           <main class="main-content">
             <div class="content-card">
+              <el-button class="back-btn" text @click="goBack">&larr; 返回</el-button>
               <el-skeleton-item
                 variant="h1"
                 style="width: 80%; height: 2.2rem; margin-bottom: 2.5rem"
@@ -94,6 +100,7 @@ onMounted(() => {
           <!-- 右侧正文 -->
           <main class="main-content">
             <div class="content-card">
+              <el-button class="back-btn" text @click="goBack">&larr; 返回</el-button>
               <h1 class="main-title">{{ article.title }}</h1>
               <div class="main-content-body" v-html="article.content"></div>
             </div>
@@ -114,13 +121,18 @@ onMounted(() => {
   display: flex;
   max-width: 1200px;
   margin: 0 auto;
-  gap: 25px;
+  gap: 32px;
   align-items: stretch;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 .sidebar {
-  flex: 0 0 320px;
+  /* flex: 0 0 320px; */
   position: sticky;
   top: 120px;
+  height: 80vh;
+  max-height: 80vh;
+  overflow: auto;
 }
 .sidebar-card {
   background: #fff;
@@ -198,6 +210,11 @@ onMounted(() => {
   border-radius: 12px;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
   flex: 1;
+  position: relative;
+  width: 100%;
+  min-width: 400px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 .main-title {
   font-size: 2.2rem;
@@ -241,6 +258,12 @@ onMounted(() => {
     position: static;
     width: 100%;
     flex: auto;
+    left: unset;
+    top: unset;
+    margin-bottom: 20px;
+  }
+  .main-content {
+    margin-left: 0;
   }
 }
 @media (max-width: 768px) {
@@ -254,5 +277,13 @@ onMounted(() => {
   .main-title {
     font-size: 1.6rem;
   }
+}
+.back-btn {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  font-size: 1rem;
+  color: #888;
+  z-index: 20;
 }
 </style>
