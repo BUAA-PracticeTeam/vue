@@ -8,12 +8,12 @@
             <div class="photo-box">
               <img :src="member.photo" alt="个人照片" class="photo" />
             </div>
-            <div class="avatar-box">
-              <img :src="member.avatar" alt="头像" class="avatar" />
-            </div>
           </div>
           <div class="info-col">
-            <h2 class="nickname">{{ member.nickname || member.username }}</h2>
+            <div class="header-row">
+              <img :src="member.avatar" alt="头像" class="avatar" />
+              <h2 class="nickname">{{ member.nickname || member.username }}</h2>
+            </div>
             <p class="work">{{ member.work || '团队成员' }}</p>
             <el-descriptions :column="1" border class="info-table">
               <el-descriptions-item label="用户名">{{ member.username }}</el-descriptions-item>
@@ -135,19 +135,34 @@ function close() {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
   background: #fafbfc;
 }
-.avatar-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 .avatar {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   background: #fafbfc;
+  margin-right: 18px;
+}
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.nickname {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+.work {
+  font-size: 1.15rem;
+  color: #6a82fb;
+  margin-bottom: 18px;
+  font-weight: 500;
+  margin-top: 0;
 }
 .info-col {
   flex: 1;
@@ -155,18 +170,6 @@ function close() {
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-.nickname {
-  font-size: 2.1rem;
-  font-weight: 700;
-  margin-bottom: 6px;
-  color: #333;
-}
-.work {
-  font-size: 1.15rem;
-  color: #6a82fb;
-  margin-bottom: 18px;
-  font-weight: 500;
 }
 .info-table {
   margin-top: 10px;
@@ -205,9 +208,14 @@ function close() {
     width: 160px;
     height: 160px;
   }
+  .header-row {
+    margin-bottom: 6px;
+    justify-content: center;
+  }
   .avatar {
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
+    margin-right: 12px;
   }
 }
 </style>
