@@ -12,6 +12,10 @@ export const userLoginService = ({ username, password }) =>
 export const userUpdateAvatarService = (avatar, username) =>
   request.patch('/my/update/avatar', { avatar, username })
 
+// 更新用户个人照片
+export const userUpdatePhotoService = (photo, username) =>
+  request.patch('/my/update/photo', { photo, username })
+
 // 更新用户密码
 export const userUpdatePasswordService = ({ old_pwd, new_pwd, username }) =>
   request.patch('/my/update/pwd', { old_pwd, new_pwd, username })

@@ -5,6 +5,7 @@ import {
   userRegisterService,
   userUpdateInfoService,
   userUpdateAvatarService,
+  userUpdatePhotoService,
 } from '@/api/user.js'
 import { message } from 'ant-design-vue'
 
@@ -172,6 +173,29 @@ export const useUserStore = defineStore(
       }
     }
 
+    // 更新用户个人照片业务逻辑
+    const updatePhoto = async (photoUrl) => {
+      try {
+        const response = await userUpdatePhotoService(photoUrl, user.value.username)
+
+        if (response.data.error_num) {
+          message.error(response.data.msg)
+          return { success: false, message: response.data.msg }
+        }
+
+        // 更新本地用户个人照片
+        setUser({ photo: photoUrl })
+
+        message.success('个人照片更新成功')
+        return { success: true, message: '个人照片更新成功' }
+      } catch (error) {
+        console.error('更新个人照片失败:', error)
+        const errorMsg = '个人照片更新失败，请稍后重试'
+        message.error(errorMsg)
+        return { success: false, message: errorMsg }
+      }
+    }
+
     return {
       user,
       loginLoading,
@@ -183,6 +207,7 @@ export const useUserStore = defineStore(
       register,
       updateUserInfo,
       updateAvatar,
+      updatePhoto,
     }
   },
 
