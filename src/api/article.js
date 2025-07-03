@@ -1,10 +1,13 @@
 import request from '@/utils/request'
 
-// 文章：获取文章列表
+// 文章：获取所有文章列表（分页/筛选）
 export const artGetListService = (params) =>
   request.get('/my/article/list', {
     params,
   })
+
+// 文章：获取当前用户所有文章（不分页，传username）
+export const artGetMyListService = (params) => request.get('/my/article/mylist', { params })
 
 // 文章：添加文章
 // 注意：data需要是一个formData格式的对象

@@ -3,14 +3,11 @@ import { ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import {
-  artPublishService,
-  artGetDetailService,
-  artEditService
-} from '@/api/article'
+import { artPublishService, artGetDetailService, artEditService } from '@/api/article'
 import { baseURL } from '@/utils/request'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import { useUserStore } from '@/stores/modules/user.js'
 // 控制抽屉显示隐藏
 const visibleDrawer = ref(false)
 
@@ -20,7 +17,7 @@ const defaultForm = {
   cate_id: '', // 分类id
   cover_img: '', // 封面图片 file 对象
   content: '', // string 内容
-  state: '' // 状态
+  state: '', // 状态
 }
 
 // 准备数据
@@ -46,6 +43,10 @@ const onPublish = async (state) => {
   for (let key in formModel.value) {
     fd.append(key, formModel.value[key])
   }
+
+  // 新增：加上当前用户名
+  const userStore = useUserStore()
+  fd.append('username', userStore.user.username)
 
   // 发请求
   if (formModel.value.id) {
@@ -80,10 +81,7 @@ const open = async (row) => {
     imgUrl.value = baseURL + formModel.value.cover_img
     // 注意：提交给后台，需要的数据格式，是file对象格式
     // 需要将网络图片地址 => 转换成 file对象，存储起来, 将来便于提交
-    const file = await imageUrlToFileObject(
-      imgUrl.value,
-      formModel.value.cover_img
-    )
+    const file = await imageUrlToFileObject(imgUrl.value, formModel.value.cover_img)
     formModel.value.cover_img = file
   } else {
     formModel.value = { ...defaultForm } // 基于默认的数据，重置form数据
@@ -101,12 +99,12 @@ async function imageUrlToFileObject(imageUrl, filename) {
 
     // 将下载的数据转换成 Blob 对象
     const blob = new Blob([response.data], {
-      type: response.headers['content-type']
+      type: response.headers['content-type'],
     })
 
     // 创建 File 对象
     const file = new File([blob], filename, {
-      type: response.headers['content-type']
+      type: response.headers['content-type'],
     })
 
     return file
@@ -117,7 +115,7 @@ async function imageUrlToFileObject(imageUrl, filename) {
 }
 
 defineExpose({
-  open
+  open,
 })
 </script>
 
@@ -134,10 +132,7 @@ defineExpose({
         <el-input v-model="formModel.title" placeholder="请输入标题"></el-input>
       </el-form-item>
       <el-form-item label="文章分类" prop="cate_id">
-        <channel-select
-          v-model="formModel.cate_id"
-          width="100%"
-        ></channel-select>
+        <channel-select v-model="formModel.cate_id" width="100%"></channel-select>
       </el-form-item>
       <el-form-item label="文章封面" prop="cover_img">
         <!-- 此处需要关闭 element-plus 的自动上传，不需要配置 action 等参数

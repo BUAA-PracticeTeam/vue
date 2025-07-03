@@ -1,30 +1,41 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { artGetListService } from '@/api/article.js'
+import { artGetMyListService } from '@/api/article.js'
 
 export const useMyArticleStore = defineStore('myArticle', () => {
-  // 当前用户的文章
-  const myArticles = ref([])
+  // 当前用户的所有文章（一次性拉取）
+  const allMyArticles = ref([])
+  const myArticles = ref([]) // 当前页展示
   const myTotal = ref(0)
   const myLoading = ref(false)
 
-  // 获取当前用户的文章（可分页/可筛选）
-  const fetchMyArticles = async (params = {}) => {
+  // 一次性拉取所有当前用户的文章
+  const fetchAllMyArticles = async (params = {}) => {
     myLoading.value = true
     try {
-      // 假设后端会根据token/session自动识别当前用户
-      const res = await artGetListService(params)
-      myArticles.value = res.data.data
-      myTotal.value = res.data.total
+      const res = await artGetMyListService(params)
+      allMyArticles.value = res.data.data
+      myTotal.value = allMyArticles.value.length
+      // 默认第一页
+      paginateArticles(params.pagenum || 1, params.pagesize || 5)
     } finally {
       myLoading.value = false
     }
   }
 
+  // 前端分页
+  const paginateArticles = (page, pageSize) => {
+    const start = (page - 1) * pageSize
+    const end = start + pageSize
+    myArticles.value = allMyArticles.value.slice(start, end)
+  }
+
   return {
+    allMyArticles,
     myArticles,
     myTotal,
     myLoading,
-    fetchMyArticles,
+    fetchAllMyArticles,
+    paginateArticles,
   }
 })

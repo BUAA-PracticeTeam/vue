@@ -1,16 +1,18 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { Delete, Edit } from '@element-plus/icons-vue'
 import ArticleEdit from './ArticleEdit.vue'
 import { formatTime } from '@/utils/format.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import PageContainer from '@/components/PageContainer.vue'
 import { useMyArticleStore } from '@/stores/modules/myArticle.js'
+import { useUserStore } from '@/stores/modules/user.js'
 
 const myArticleStore = useMyArticleStore()
-const articleList = ref([]) // 文章列表
-const total = ref(0) // 总条数
-const loading = ref(true) // loading状态
+const userStore = useUserStore()
+const articleList = computed(() => myArticleStore.myArticles)
+const total = computed(() => myArticleStore.myTotal)
+const loading = computed(() => myArticleStore.myLoading)
 
 // 定义请求参数对象
 const params = ref({
@@ -19,14 +21,13 @@ const params = ref({
   state: '',
 })
 
-// 基于params参数，获取文章列表
+// 获取所有文章并做前端分页
 const getArticleList = async () => {
-  loading.value = true
-  await myArticleStore.fetchMyArticles(params.value)
-  articleList.value = myArticleStore.myArticles
-  total.value = myArticleStore.myTotal
-  loading.value = myArticleStore.myLoading
-  loading.value = false
+  await myArticleStore.fetchAllMyArticles({
+    username: userStore.user.username,
+    state: params.value.state,
+  })
+  myArticleStore.paginateArticles(params.value.pagenum, params.value.pagesize)
 }
 
 onMounted(() => {
@@ -37,11 +38,11 @@ onMounted(() => {
 const onSizeChange = (size) => {
   params.value.pagenum = 1
   params.value.pagesize = size
-  getArticleList()
+  myArticleStore.paginateArticles(params.value.pagenum, params.value.pagesize)
 }
 const onCurrentChange = (page) => {
   params.value.pagenum = page
-  getArticleList()
+  myArticleStore.paginateArticles(params.value.pagenum, params.value.pagesize)
 }
 
 // 搜索逻辑 => 按照最新的条件，重新检索，从第一页开始展示
@@ -74,9 +75,10 @@ const onDeleteArticle = async (row) => {
     cancelButtonText: '取消',
     type: 'warning',
   })
-  await myArticleStore.fetchMyArticles(params.value) // 重新拉取列表
+  // 这里应调用删除接口，删除后重新拉取所有文章
+  // await myArticleStore.deleteArticle(row.id) // 你可根据store实现
+  await getArticleList()
   ElMessage.success('删除成功')
-  getArticleList()
 }
 
 // 添加或者编辑 成功的回调
