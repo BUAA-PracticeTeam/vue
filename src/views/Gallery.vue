@@ -168,9 +168,22 @@ defineOptions({
 .gallery-container {
   margin: 0 auto;
   width: 80%;
+  padding: 2rem 1.5rem;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
+  border: 2.5px solid #e0e6f6;
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(41, 137, 216, 0.07);
+  background: rgba(255, 255, 255, 0.96);
+  box-sizing: border-box;
+  transition:
+    box-shadow 0.3s,
+    border-color 0.3s;
+}
+.gallery-container:hover {
+  box-shadow: 0 12px 40px rgba(41, 137, 216, 0.13);
+  border-color: #b3d4fc;
 }
 
 .gallery-item {

@@ -146,9 +146,22 @@ const refresh = async () => {
 .team-members {
   width: 70%;
   margin: 0 auto;
+  padding: 2rem 1.5rem;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 2rem;
+  border: 2.5px solid #e0e6f6;
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(41, 137, 216, 0.07);
+  background: rgba(255, 255, 255, 0.96);
+  box-sizing: border-box;
+  transition:
+    box-shadow 0.3s,
+    border-color 0.3s;
+}
+.team-members:hover {
+  box-shadow: 0 12px 40px rgba(41, 137, 216, 0.13);
+  border-color: #b3d4fc;
 }
 
 .member-card {
