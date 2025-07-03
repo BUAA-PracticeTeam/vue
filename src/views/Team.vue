@@ -3,15 +3,13 @@ import { ref, onMounted, computed } from 'vue'
 import { useTeamStore } from '@/stores/modules/team.js'
 import TeamMemberDetail from '@/components/TeamMemberDetail.vue'
 import { defineOptions } from 'vue'
-import { ElSkeleton } from 'element-plus'
 
+// 组件名
 defineOptions({
   name: 'TeamPage',
 })
 
 const teamStore = useTeamStore()
-
-// 使用计算属性获取团队成员数据
 const teamMembers = computed(() => teamStore.teamMembers)
 const loading = computed(() => teamStore.loading)
 
@@ -27,11 +25,17 @@ function closeDetail() {
   selectedMember.value = null
 }
 
-// 组件挂载时获取团队成员数据
+// 只加载一次
 onMounted(async () => {
-  // 每次都从服务器获取最新数据
-  await teamStore.getTeamMembers()
+  if (!teamMembers.value.length) {
+    await teamStore.getTeamMembers()
+  }
 })
+
+// 刷新按钮
+const refresh = async () => {
+  await teamStore.getTeamMembers()
+}
 </script>
 
 <template>
@@ -39,32 +43,27 @@ onMounted(async () => {
     <div class="container">
       <div class="section-title">
         <h2>队员介绍</h2>
+        <button class="refresh-btn" @click="refresh" :disabled="loading">
+          {{ loading ? '刷新中...' : '刷新' }}
+        </button>
       </div>
 
-      <!-- 加载骨架屏 -->
-      <el-skeleton v-if="loading" animated :count="6">
-        <template #template>
-          <div class="member-card">
-            <div class="member-image">
-              <el-skeleton-item
-                variant="image"
-                style="width: 100%; height: 100%; border-radius: 8px"
-              />
-            </div>
-            <div class="member-info">
-              <el-skeleton-item
-                variant="h3"
-                style="width: 60%; height: 1.5em; margin-bottom: 8px"
-              />
-              <el-skeleton-item
-                variant="text"
-                style="width: 40%; height: 1em; margin-bottom: 8px"
-              />
-              <el-skeleton-item variant="text" style="width: 80%; height: 1em" />
-            </div>
+      <!-- 加载骨架屏：8个和真实卡片一样大小的骨架卡片 -->
+      <div v-if="loading" class="team-members">
+        <div class="member-card" v-for="n in 8" :key="n">
+          <div class="member-image">
+            <el-skeleton-item
+              variant="image"
+              style="width: 100%; height: 100%; border-radius: 8px"
+            />
           </div>
-        </template>
-      </el-skeleton>
+          <div class="member-info">
+            <el-skeleton-item variant="h3" style="width: 60%; height: 1.5em; margin-bottom: 8px" />
+            <el-skeleton-item variant="text" style="width: 40%; height: 1em; margin-bottom: 8px" />
+            <el-skeleton-item variant="text" style="width: 80%; height: 1em" />
+          </div>
+        </div>
+      </div>
 
       <!-- 团队成员列表 -->
       <div v-else-if="teamMembers.length > 0" class="team-members">
@@ -96,19 +95,6 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.team-page {
-  padding: 2rem 0;
-  padding-top: 100px;
-}
-
-.team-members {
-  width: 70%;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 2rem;
-}
-
 .section-title {
   text-align: center;
   margin-bottom: 2rem;
@@ -131,6 +117,38 @@ onMounted(async () => {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.refresh-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 0 10px;
+  padding: 6px 18px;
+  background: #2989d8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.refresh-btn:disabled {
+  background: #b0b0b0;
+  cursor: not-allowed;
+}
+
+.team-page {
+  padding: 2rem 0;
+  padding-top: 100px;
+}
+
+.team-members {
+  width: 70%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
 }
 
 .member-card {
@@ -180,38 +198,11 @@ onMounted(async () => {
   margin-bottom: 1rem;
 }
 
-.social-links {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.social-links a {
-  color: #666;
-  transition: color 0.3s ease;
-}
-
-.social-links a:hover {
-  color: #2989d8;
-}
-
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 0;
-  color: #666;
-}
-
-.loading-container p {
-  margin-top: 1rem;
-  font-size: 1.1rem;
-}
-
 .empty-state {
-  display: flex;
-  justify-content: center;
-  padding: 4rem 0;
+  width: 100%;
+  text-align: center;
+  color: #888;
+  font-size: 1.2rem;
+  padding: 60px 0;
 }
 </style>

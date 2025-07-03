@@ -1,47 +1,30 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { defineOptions } from 'vue'
-import { artGetListService } from '@/api/article'
 import { useRouter } from 'vue-router'
-import { ElSkeleton } from 'element-plus'
+import { useArticleStore } from '@/stores/modules/article'
+import { storeToRefs } from 'pinia'
 
-const galleryItems = ref([])
 const router = useRouter()
-const loading = ref(true)
+const articleStore = useArticleStore()
+const { allArticles, loading } = storeToRefs(articleStore)
 
-// 动态获取后端所有文章
-const fetchGalleryArticles = async () => {
-  loading.value = true
-  const res = await artGetListService({ pagenum: 1, pagesize: 1000, state: '已发布' })
-  // 适配后端返回结构
-  galleryItems.value = (res.data.data || [])
-    .filter((item) => item.state === '已发布')
-    .map((item) => ({
-      title: item.title,
-      description: item.content ? item.content.replace(/<[^>]+>/g, '').slice(0, 80) : '',
-      image: item.cover,
-      pub_date: item.pub_date,
-      author: item.author && item.author.nickname ? item.author.nickname : '',
-      id: item.id,
-    }))
-  loading.value = false
+// 只加载一次
+onMounted(() => {
+  if (!allArticles.value.length) {
+    articleStore.fetchAllArticles({ pagenum: 1, pagesize: 1000, state: '已发布' })
+  }
+})
+
+// 刷新按钮
+const refresh = () => {
+  articleStore.fetchAllArticles({ pagenum: 1, pagesize: 1000, state: '已发布' })
 }
-
-fetchGalleryArticles()
 
 const showModal = ref(false)
 const currentImage = ref('')
 const currentTitle = ref('')
 const currentDescription = ref('')
-
-const showGalleryModal = (index) => {
-  const item = galleryItems.value[index]
-  currentImage.value = item.image
-  currentTitle.value = item.title
-  currentDescription.value = item.description
-  showModal.value = true
-  document.body.style.overflow = 'hidden'
-}
 
 const closeModal = () => {
   showModal.value = false
@@ -52,7 +35,6 @@ const goToArticle = (id) => {
   router.push(`/article/${id}`)
 }
 
-// 设置组件名称（Vue 3.3+）
 defineOptions({
   name: 'GalleryPage',
 })
@@ -63,6 +45,9 @@ defineOptions({
     <div class="container">
       <div class="section-title">
         <h2>精彩回顾</h2>
+        <button class="refresh-btn" @click="refresh" :disabled="loading">
+          {{ loading ? '刷新中...' : '刷新' }}
+        </button>
       </div>
       <div class="gallery-container">
         <template v-if="loading">
@@ -81,33 +66,38 @@ defineOptions({
           </div>
         </template>
         <template v-else>
-          <div
-            class="gallery-item"
-            v-for="(item, index) in galleryItems"
-            :key="index"
-            @click="goToArticle(item.id)"
-          >
-            <template v-if="item.image">
-              <img :src="item.image" :alt="item.title" />
-            </template>
-            <template v-else>
-              <div class="gallery-item-placeholder">
-                <i class="fa fa-image"></i>
+          <template v-if="allArticles.length">
+            <div
+              class="gallery-item"
+              v-for="item in allArticles.filter((a) => a.state === '已发布')"
+              :key="item.id"
+              @click="goToArticle(item.id)"
+            >
+              <template v-if="item.cover">
+                <img :src="item.cover" :alt="item.title" />
+              </template>
+              <template v-else>
+                <div class="gallery-item-placeholder">
+                  <i class="fa fa-image"></i>
+                </div>
+              </template>
+              <div class="gallery-info-bar">
+                <div class="gallery-title">{{ item.title }}</div>
+                <div class="gallery-meta">
+                  <span class="gallery-author">{{ item.author?.nickname || '未知作者' }}</span>
+                  <span class="gallery-date">{{
+                    item.pub_date ? item.pub_date.slice(0, 10) : ''
+                  }}</span>
+                </div>
               </div>
-            </template>
-            <div class="gallery-info-bar">
-              <div class="gallery-title">{{ item.title }}</div>
-              <div class="gallery-meta">
-                <span class="gallery-author">{{ item.author || '未知作者' }}</span>
-                <span class="gallery-date">{{
-                  item.pub_date ? item.pub_date.slice(0, 10) : ''
-                }}</span>
+              <div class="gallery-item-overlay">
+                <i class="fa fa-search-plus"></i>
               </div>
             </div>
-            <div class="gallery-item-overlay">
-              <i class="fa fa-search-plus"></i>
-            </div>
-          </div>
+          </template>
+          <template v-else>
+            <div class="empty-tip">暂无已发布文章</div>
+          </template>
         </template>
       </div>
     </div>
@@ -154,6 +144,25 @@ defineOptions({
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.refresh-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 0 10px;
+  padding: 6px 18px;
+  background: #2989d8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.refresh-btn:disabled {
+  background: #b0b0b0;
+  cursor: not-allowed;
 }
 
 .gallery-container {
@@ -301,5 +310,13 @@ defineOptions({
 
 .gallery-date {
   font-size: 0.92rem;
+}
+
+.empty-tip {
+  width: 100%;
+  text-align: center;
+  color: #888;
+  font-size: 1.2rem;
+  padding: 60px 0;
 }
 </style>
