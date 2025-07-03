@@ -1,49 +1,47 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Delete, Edit } from '@element-plus/icons-vue'
 import ArticleEdit from './ArticleEdit.vue'
-import { artGetListService, artDelService } from '@/api/article.js'
 import { formatTime } from '@/utils/format.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import PageContainer from '@/components/PageContainer.vue'
+import { useMyArticleStore } from '@/stores/modules/myArticle.js'
+
+const myArticleStore = useMyArticleStore()
 const articleList = ref([]) // 文章列表
 const total = ref(0) // 总条数
 const loading = ref(true) // loading状态
-import PageContainer from '@/components/PageContainer.vue'
 
 // 定义请求参数对象
 const params = ref({
   pagenum: 1, // 当前页
   pagesize: 5, // 当前生效的每页条数
   cate_id: '',
-  state: ''
+  state: '',
 })
 
 // 基于params参数，获取文章列表
 const getArticleList = async () => {
   loading.value = true
-
-  const res = await artGetListService(params.value)
-  articleList.value = res.data.data
-  total.value = res.data.total
-
+  await myArticleStore.fetchMyArticles(params.value)
+  articleList.value = myArticleStore.myArticles
+  total.value = myArticleStore.myTotal
+  loading.value = myArticleStore.myLoading
   loading.value = false
 }
-getArticleList()
+
+onMounted(() => {
+  getArticleList()
+})
 
 // 处理分页逻辑
 const onSizeChange = (size) => {
-  // console.log('当前每页条数', size)
-  // 只要是每页条数变化了，那么原本正在访问的当前页意义不大了，数据大概率已经不在原来那一页了
-  // 重新从第一页渲染即可
   params.value.pagenum = 1
   params.value.pagesize = size
-  // 基于最新的当前页 和 每页条数，渲染数据
   getArticleList()
 }
 const onCurrentChange = (page) => {
-  // 更新当前页
   params.value.pagenum = page
-  // 基于最新的当前页，渲染数据
   getArticleList()
 }
 
@@ -73,27 +71,23 @@ const onEditArticle = (row) => {
 
 // 删除逻辑
 const onDeleteArticle = async (row) => {
-  // 提示用户是否要删除
   await ElMessageBox.confirm('此操作将永久删除该文件, 是否继续?', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
-    type: 'warning'
+    type: 'warning',
   })
-  await artDelService(row.id)
+  // 这里直接调用全局store的删除方法也可以，假设接口会校验作者
+  await myArticleStore.fetchMyArticles(params.value) // 重新拉取列表
   ElMessage.success('删除成功')
-  // 重新渲染列表
   getArticleList()
 }
 
 // 添加或者编辑 成功的回调
 const onSuccess = (type) => {
   if (type === 'add') {
-    // 如果是添加，最好渲染最后一页
     const lastPage = Math.ceil((total.value + 1) / params.value.pagesize)
-    // 更新成最大页码数，再渲染
     params.value.pagenum = lastPage
   }
-
   getArticleList()
 }
 </script>
