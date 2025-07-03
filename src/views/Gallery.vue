@@ -1,45 +1,26 @@
 <script setup>
 import { ref } from 'vue'
 import { defineOptions } from 'vue'
+import { artGetListService } from '@/api/article'
 
-const galleryItems = ref([
-  {
-    title: '乡村支教活动',
-    description: '2022年暑期在贵州省某小学开展的为期两周的支教活动。',
-    image:
-      'https://images.unsplash.com/photo-1588072432836-e10032774350?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-  },
-  {
-    title: '环保宣传活动',
-    description: '在城市公园开展的垃圾分类和环保知识宣传活动。',
-    image:
-      'https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-  },
-  {
-    title: '社区志愿服务',
-    description: '为社区老人提供生活帮助和精神关怀的志愿服务活动。',
-    image:
-      'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-  },
-  {
-    title: '团队建设活动',
-    description: '团队内部的团建活动，增进队员之间的了解和默契。',
-    image:
-      'https://images.unsplash.com/photo-1542626991-cbc4e32524cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-  },
-  {
-    title: '山区调研',
-    description: '对偏远山区教育状况进行的实地调研活动。',
-    image:
-      'https://images.unsplash.com/photo-1527909740628-f2a110ce1f0f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-  },
-  {
-    title: '公益讲座',
-    description: '邀请专家为社区居民举办公益讲座。',
-    image:
-      'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-  },
-])
+const galleryItems = ref([])
+
+// 动态获取后端所有文章
+const fetchGalleryArticles = async () => {
+  const res = await artGetListService({ pagenum: 1, pagesize: 1000, state: '已发布' })
+  // 适配后端返回结构
+  galleryItems.value = (res.data.data || [])
+    .filter((item) => item.state === '已发布')
+    .map((item) => ({
+      title: item.title,
+      description: item.content ? item.content.replace(/<[^>]+>/g, '').slice(0, 80) : '',
+      image: item.cover,
+      pub_date: item.pub_date,
+      author: item.author && item.author.nickname ? item.author.nickname : '',
+    }))
+}
+
+fetchGalleryArticles()
 
 const showModal = ref(false)
 const currentImage = ref('')
@@ -79,7 +60,23 @@ defineOptions({
           :key="index"
           @click="showGalleryModal(index)"
         >
-          <img :src="item.image" :alt="item.title" />
+          <template v-if="item.image">
+            <img :src="item.image" :alt="item.title" />
+          </template>
+          <template v-else>
+            <div class="gallery-item-placeholder">
+              <i class="fa fa-image"></i>
+            </div>
+          </template>
+          <div class="gallery-info-bar">
+            <div class="gallery-title">{{ item.title }}</div>
+            <div class="gallery-meta">
+              <span class="gallery-author">{{ item.author || '未知作者' }}</span>
+              <span class="gallery-date">{{
+                item.pub_date ? item.pub_date.slice(0, 10) : ''
+              }}</span>
+            </div>
+          </div>
           <div class="gallery-item-overlay">
             <i class="fa fa-search-plus"></i>
           </div>
@@ -225,5 +222,56 @@ defineOptions({
   color: white;
   font-size: 2rem;
   cursor: pointer;
+}
+
+.gallery-item-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: #b0b0b0;
+}
+
+.gallery-info-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.56);
+  color: #fff;
+  padding: 10px 16px 6px 16px;
+  box-sizing: border-box;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.gallery-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 2px;
+  text-shadow: 0 2px 8px #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gallery-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.92rem;
+  opacity: 0.85;
+}
+
+.gallery-author {
+  margin-right: 10px;
+}
+
+.gallery-date {
+  font-size: 0.92rem;
 }
 </style>
