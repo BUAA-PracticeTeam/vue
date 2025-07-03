@@ -3,12 +3,15 @@ import { ref } from 'vue'
 import { defineOptions } from 'vue'
 import { artGetListService } from '@/api/article'
 import { useRouter } from 'vue-router'
+import { ElSkeleton } from 'element-plus'
 
 const galleryItems = ref([])
 const router = useRouter()
+const loading = ref(true)
 
 // 动态获取后端所有文章
 const fetchGalleryArticles = async () => {
+  loading.value = true
   const res = await artGetListService({ pagenum: 1, pagesize: 1000, state: '已发布' })
   // 适配后端返回结构
   galleryItems.value = (res.data.data || [])
@@ -21,6 +24,7 @@ const fetchGalleryArticles = async () => {
       author: item.author && item.author.nickname ? item.author.nickname : '',
       id: item.id,
     }))
+  loading.value = false
 }
 
 fetchGalleryArticles()
@@ -61,33 +65,50 @@ defineOptions({
         <h2>精彩回顾</h2>
       </div>
       <div class="gallery-container">
-        <div
-          class="gallery-item"
-          v-for="(item, index) in galleryItems"
-          :key="index"
-          @click="goToArticle(item.id)"
-        >
-          <template v-if="item.image">
-            <img :src="item.image" :alt="item.title" />
-          </template>
-          <template v-else>
-            <div class="gallery-item-placeholder">
-              <i class="fa fa-image"></i>
-            </div>
-          </template>
-          <div class="gallery-info-bar">
-            <div class="gallery-title">{{ item.title }}</div>
-            <div class="gallery-meta">
-              <span class="gallery-author">{{ item.author || '未知作者' }}</span>
-              <span class="gallery-date">{{
-                item.pub_date ? item.pub_date.slice(0, 10) : ''
-              }}</span>
+        <template v-if="loading">
+          <div class="gallery-item" v-for="n in 8" :key="n">
+            <el-skeleton-item
+              variant="image"
+              style="width: 100%; height: 100%; border-radius: 8px"
+            />
+            <div class="gallery-info-bar">
+              <el-skeleton-item
+                variant="text"
+                style="width: 60%; height: 1.2em; margin-bottom: 4px"
+              />
+              <el-skeleton-item variant="text" style="width: 40%; height: 1em" />
             </div>
           </div>
-          <div class="gallery-item-overlay">
-            <i class="fa fa-search-plus"></i>
+        </template>
+        <template v-else>
+          <div
+            class="gallery-item"
+            v-for="(item, index) in galleryItems"
+            :key="index"
+            @click="goToArticle(item.id)"
+          >
+            <template v-if="item.image">
+              <img :src="item.image" :alt="item.title" />
+            </template>
+            <template v-else>
+              <div class="gallery-item-placeholder">
+                <i class="fa fa-image"></i>
+              </div>
+            </template>
+            <div class="gallery-info-bar">
+              <div class="gallery-title">{{ item.title }}</div>
+              <div class="gallery-meta">
+                <span class="gallery-author">{{ item.author || '未知作者' }}</span>
+                <span class="gallery-date">{{
+                  item.pub_date ? item.pub_date.slice(0, 10) : ''
+                }}</span>
+              </div>
+            </div>
+            <div class="gallery-item-overlay">
+              <i class="fa fa-search-plus"></i>
+            </div>
           </div>
-        </div>
+        </template>
       </div>
     </div>
 

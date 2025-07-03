@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useTeamStore } from '@/stores/modules/team.js'
 import TeamMemberDetail from '@/components/TeamMemberDetail.vue'
 import { defineOptions } from 'vue'
+import { ElSkeleton } from 'element-plus'
 
 defineOptions({
   name: 'TeamPage',
@@ -40,11 +41,30 @@ onMounted(async () => {
         <h2>队员介绍</h2>
       </div>
 
-      <!-- 加载状态 -->
-      <div v-if="loading" class="loading-container">
-        <el-loading-spinner />
-        <p>正在加载团队成员信息...</p>
-      </div>
+      <!-- 加载骨架屏 -->
+      <el-skeleton v-if="loading" animated :count="6">
+        <template #template>
+          <div class="member-card">
+            <div class="member-image">
+              <el-skeleton-item
+                variant="image"
+                style="width: 100%; height: 100%; border-radius: 8px"
+              />
+            </div>
+            <div class="member-info">
+              <el-skeleton-item
+                variant="h3"
+                style="width: 60%; height: 1.5em; margin-bottom: 8px"
+              />
+              <el-skeleton-item
+                variant="text"
+                style="width: 40%; height: 1em; margin-bottom: 8px"
+              />
+              <el-skeleton-item variant="text" style="width: 80%; height: 1em" />
+            </div>
+          </div>
+        </template>
+      </el-skeleton>
 
       <!-- 团队成员列表 -->
       <div v-else-if="teamMembers.length > 0" class="team-members">
