@@ -162,8 +162,6 @@ export const useUserStore = defineStore(
 
         // 更新本地用户头像
         setUser({ avatar: avatarUrl })
-
-        message.success('头像更新成功')
         return { success: true, message: '头像更新成功' }
       } catch (error) {
         console.error('更新头像失败:', error)

@@ -1,42 +1,23 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, computed } from 'vue'
+import { useTeamStore } from '@/stores/modules/team.js'
 import { defineOptions } from 'vue'
 
 defineOptions({
-  name: 'TeamPage', // 直接设置组件名称
+  name: 'TeamPage',
 })
 
-// 使用 ref 定义响应式数据
-const teamMembers = ref([
-  {
-    id: 1,
-    name: '李堂玮',
-    position: '队长',
-    bio: '负责团队整体规划和协调工作，有丰富的实践经验。',
-    image: 'https://randomuser.me/api/portraits/men/32.jpg',
-  },
-  {
-    id: 2,
-    name: '陈翰林',
-    position: '副队长',
-    bio: '协助队长工作，主要负责活动策划和执行。',
-    image: 'https://randomuser.me/api/portraits/women/44.jpg',
-  },
-  {
-    id: 3,
-    name: '王芳',
-    position: '宣传组长',
-    bio: '负责团队活动的宣传和报道工作。',
-    image: 'https://randomuser.me/api/portraits/women/63.jpg',
-  },
-  {
-    id: 4,
-    name: '赵强',
-    position: '后勤组长',
-    bio: '负责活动物资准备和后勤保障工作。',
-    image: 'https://randomuser.me/api/portraits/men/75.jpg',
-  },
-])
+const teamStore = useTeamStore()
+
+// 使用计算属性获取团队成员数据
+const teamMembers = computed(() => teamStore.teamMembers)
+const loading = computed(() => teamStore.loading)
+
+// 组件挂载时获取团队成员数据
+onMounted(async () => {
+  // 每次都从服务器获取最新数据
+  await teamStore.getTeamMembers()
+})
 </script>
 
 <template>
@@ -45,22 +26,30 @@ const teamMembers = ref([
       <div class="section-title">
         <h2>队员介绍</h2>
       </div>
-      <div class="team-members">
+
+      <!-- 加载状态 -->
+      <div v-if="loading" class="loading-container">
+        <el-loading-spinner />
+        <p>正在加载团队成员信息...</p>
+      </div>
+
+      <!-- 团队成员列表 -->
+      <div v-else-if="teamMembers.length > 0" class="team-members">
         <div class="member-card" v-for="member in teamMembers" :key="member.id">
           <div class="member-image">
-            <img :src="member.image" :alt="member.name" />
+            <img :src="member.photo" :alt="member.nickname || member.username" />
           </div>
           <div class="member-info">
-            <h3>{{ member.name }}</h3>
-            <p class="position">{{ member.position }}</p>
-            <p>{{ member.bio }}</p>
-            <div class="social-links">
-              <a href="#"><i class="fa fa-weibo"></i></a>
-              <a href="#"><i class="fa fa-weixin"></i></a>
-              <a href="#"><i class="fa fa-qq"></i></a>
-            </div>
+            <h3>{{ member.nickname || member.username }}</h3>
+            <p class="position">{{ member.work || '团队成员' }}</p>
+            <p>{{ member.signature || '暂无签名' }}</p>
           </div>
         </div>
+      </div>
+
+      <!-- 空状态 -->
+      <div v-else class="empty-state">
+        <el-empty description="暂无团队成员信息" />
       </div>
     </div>
   </div>
@@ -164,5 +153,25 @@ const teamMembers = ref([
 
 .social-links a:hover {
   color: #2989d8;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 0;
+  color: #666;
+}
+
+.loading-container p {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
 }
 </style>

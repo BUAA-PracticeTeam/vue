@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { Plus, Upload, Picture } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/modules/user.js'
 import PageContainer from '@/components/PageContainer.vue'
+import { ElMessage } from 'element-plus'
 
 const userStore = useUserStore()
 
@@ -12,13 +13,22 @@ const user = computed(() => userStore.getUser())
 // 头像相关
 const avatarUrl = ref(user.value.avatar || '')
 const avatarUploadRef = ref()
+const avatarLoading = ref(false)
 
 // 个人照片相关
 const photoUrl = ref(user.value.photo || '')
 const photoUploadRef = ref()
+const photoLoading = ref(false)
 
 // 头像文件选择处理
 const onSelectAvatarFile = (uploadFile) => {
+  // 检查文件大小（10MB = 10 * 1024 * 1024 bytes）
+  const maxSize = 10 * 1024 * 1024
+  if (uploadFile.raw.size > maxSize) {
+    ElMessage.error('文件大小不能超过10MB')
+    return
+  }
+
   const reader = new FileReader()
   reader.readAsDataURL(uploadFile.raw)
   reader.onload = () => {
@@ -28,6 +38,13 @@ const onSelectAvatarFile = (uploadFile) => {
 
 // 个人照片文件选择处理
 const onSelectPhotoFile = (uploadFile) => {
+  // 检查文件大小（10MB = 10 * 1024 * 1024 bytes）
+  const maxSize = 10 * 1024 * 1024
+  if (uploadFile.raw.size > maxSize) {
+    ElMessage.error('文件大小不能超过10MB')
+    return
+  }
+
   const reader = new FileReader()
   reader.readAsDataURL(uploadFile.raw)
   reader.onload = () => {
@@ -37,17 +54,41 @@ const onSelectPhotoFile = (uploadFile) => {
 
 // 更新头像
 const onUpdateAvatar = async () => {
-  const result = await userStore.updateAvatar(avatarUrl.value)
-  if (result.success) {
-    console.log('头像更新成功')
+  if (!avatarUrl.value) {
+    ElMessage.warning('请先选择头像图片')
+    return
+  }
+
+  avatarLoading.value = true
+  ElMessage.info('正在更新头像，请稍候...')
+
+  try {
+    const result = await userStore.updateAvatar(avatarUrl.value)
+    if (result.success) {
+      ElMessage.success('头像更新成功')
+    }
+  } finally {
+    avatarLoading.value = false
   }
 }
 
 // 更新个人照片
 const onUpdatePhoto = async () => {
-  const result = await userStore.updatePhoto(photoUrl.value)
-  if (result.success) {
-    console.log('个人照片更新成功')
+  if (!photoUrl.value) {
+    ElMessage.warning('请先选择个人照片')
+    return
+  }
+
+  photoLoading.value = true
+  ElMessage.info('正在更新个人照片，请稍候...')
+
+  try {
+    const result = await userStore.updatePhoto(photoUrl.value)
+    if (result.success) {
+      ElMessage.success('个人照片更新成功')
+    }
+  } finally {
+    photoLoading.value = false
   }
 }
 </script>
@@ -77,9 +118,20 @@ const onUpdatePhoto = async () => {
               </el-icon>
             </el-upload>
 
+            <div class="file-info">
+              <span class="file-size-limit">支持格式：JPG、PNG、GIF</span>
+              <span class="file-size-limit">文件大小：不超过10MB</span>
+            </div>
+
             <div class="upload-actions">
-              <el-button @click="onUpdateAvatar" type="success" :icon="Upload" size="large">
-                上传头像
+              <el-button
+                @click="onUpdateAvatar"
+                type="success"
+                :icon="Upload"
+                size="large"
+                :loading="avatarLoading"
+              >
+                更新头像
               </el-button>
             </div>
           </div>
@@ -106,9 +158,20 @@ const onUpdatePhoto = async () => {
               </el-icon>
             </el-upload>
 
+            <div class="file-info">
+              <span class="file-size-limit">支持格式：JPG、PNG、GIF</span>
+              <span class="file-size-limit">文件大小：不超过10MB</span>
+            </div>
+
             <div class="upload-actions">
-              <el-button @click="onUpdatePhoto" type="success" :icon="Upload" size="large">
-                上传照片
+              <el-button
+                @click="onUpdatePhoto"
+                type="success"
+                :icon="Upload"
+                size="large"
+                :loading="photoLoading"
+              >
+                更新照片
               </el-button>
             </div>
           </div>
@@ -168,6 +231,20 @@ const onUpdatePhoto = async () => {
   flex-direction: column;
   align-items: center;
   gap: 20px;
+}
+
+.file-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin-top: -10px;
+}
+
+.file-size-limit {
+  font-size: 12px;
+  color: #8c8c8c;
+  text-align: center;
 }
 
 .upload-actions {
