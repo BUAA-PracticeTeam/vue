@@ -16,7 +16,7 @@ export default defineComponent({
           <ul>
             <li><i class="fa fa-map-marker"></i> 北京市海淀区学院路37号</li>
             <li><i class="fa fa-phone"></i> 010-88889999</li>
-            <li><i class="fa fa-envelope"></i> contact@youthteam.com</li>
+            <li><i class="fa fa-envelope"></i> 3196932484@qq.com</li>
           </ul>
         </div>
 
@@ -31,7 +31,7 @@ export default defineComponent({
               <router-link to="/about">关于我们</router-link>
             </li>
             <li>
-              <router-link to="/gallery">活动相册</router-link>
+              <router-link to="/gallery">精彩回顾</router-link>
             </li>
             <li>
               <router-link to="/forum">交流论坛</router-link>
@@ -43,10 +43,36 @@ export default defineComponent({
         <div class="footer-col">
           <h3>关注我们</h3>
           <div class="social-links">
-            <a href="#"><i class="fa fa-weibo"></i></a>
             <a href="#"><i class="fa fa-weixin"></i></a>
-            <a href="#"><i class="fa fa-qq"></i></a>
-            <a href="#"><i class="fa fa-github"></i></a>
+            <a href="https://github.com/CircleCoder05"><i class="fa fa-github"></i></a>
+            <!-- B站 -->
+            <a href="#" title="B站">
+              <svg
+                viewBox="0 0 1024 1024"
+                width="1.5em"
+                height="1.5em"
+                fill="currentColor"
+                style="vertical-align: middle"
+              >
+                <path
+                  d="M320 128c0-17.7 14.3-32 32-32s32 14.3 32 32v32h256v-32c0-17.7 14.3-32 32-32s32 14.3 32 32v32h24c70.7 0 128 57.3 128 128v448c0 70.7-57.3 128-128 128H232c-70.7 0-128-57.3-128-128V288c0-70.7 57.3-128 128-128h24v-32zm-88 160v416c0 39.8 32.2 72 72 72h560c39.8 0 72-32.2 72-72V288c0-39.8-32.2-72-72-72H232c-39.8 0-72 32.2-72 72zm192 128c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32s-32-14.3-32-32v-96c0-17.7 14.3-32 32-32zm176 32c0-17.7 14.3-32 32-32s32 14.3 32 32v96c0 17.7-14.3 32-32 32s-32-14.3-32-32v-96z"
+                />
+              </svg>
+            </a>
+            <!-- 抖音 -->
+            <a href="#" title="抖音">
+              <svg
+                viewBox="0 0 1024 1024"
+                width="1.5em"
+                height="1.5em"
+                fill="currentColor"
+                style="vertical-align: middle"
+              >
+                <path
+                  d="M800 384c-61.9 0-112-50.1-112-112V128h-96v576c0 44.2-35.8 80-80 80s-80-35.8-80-80 35.8-80 80-80c8.8 0 16-7.2 16-16v-96c0-8.8-7.2-16-16-16-123.7 0-224 100.3-224 224s100.3 224 224 224 224-100.3 224-224V512c38.2 27.6 85 44 136 44v-96c-24.3 0-47.3-5.2-68-14.6V384z"
+                />
+              </svg>
+            </a>
           </div>
           <div class="newsletter">
             <input type="email" placeholder="输入邮箱订阅" />
@@ -58,7 +84,7 @@ export default defineComponent({
       <!-- 第二行：版权信息 -->
       <div class="copyright">
         <p>© 2025 蒲公英乡野航迹实践队 版权所有</p>
-        <p>© 技术总监：CircleCoder</p>
+        <p>© 技术：CircleCoder</p>
       </div>
     </div>
   </footer>
