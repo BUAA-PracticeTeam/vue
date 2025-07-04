@@ -88,13 +88,9 @@ export default defineComponent({
           </p>
         </div>
         <div class="about-image">
-          <el-carousel height="320px" indicator-position="outside">
+          <el-carousel height="320px" indicator-position="none">
             <el-carousel-item v-for="img in aboutImages" :key="img">
-              <img
-                :src="img"
-                alt="团队合影"
-                style="width: 100%; height: 320px; object-fit: cover; border-radius: 8px"
-              />
+              <img :src="img" alt="团队合影" />
             </el-carousel-item>
           </el-carousel>
         </div>
@@ -216,13 +212,14 @@ export default defineComponent({
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  height: 320px;
 }
 
 .about-image img {
   width: 100%;
-  height: auto;
+  height: 320px;
+  object-fit: cover;
   display: block;
-  transition: transform 0.5s ease;
 }
 
 .about-image:hover img {
