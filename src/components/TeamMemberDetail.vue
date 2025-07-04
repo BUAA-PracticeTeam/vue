@@ -6,12 +6,22 @@
         <div class="card-content">
           <div class="photo-col">
             <div class="photo-box">
-              <img :src="member.photo" alt="个人照片" class="photo" />
+              <img
+                :src="member.photo || '/src/assets/img/default-avatar.svg'"
+                alt="个人照片"
+                class="photo"
+                @error="handlePhotoError"
+              />
             </div>
           </div>
           <div class="info-col">
             <div class="header-row">
-              <img :src="member.avatar" alt="头像" class="avatar" />
+              <img
+                :src="member.avatar || '/src/assets/img/default-avatar.svg'"
+                alt="头像"
+                class="avatar"
+                @error="handleAvatarError"
+              />
               <h2 class="nickname">{{ member.nickname || member.username }}</h2>
             </div>
             <p class="work">{{ member.work || '团队成员' }}</p>
@@ -24,7 +34,9 @@
               <el-descriptions-item label="个人介绍">{{
                 member.introduction || '暂无介绍'
               }}</el-descriptions-item>
-              <el-descriptions-item label="邮箱">{{ member.email }}</el-descriptions-item>
+              <el-descriptions-item label="邮箱">{{
+                member.email || '暂无邮箱'
+              }}</el-descriptions-item>
             </el-descriptions>
           </div>
         </div>
@@ -34,13 +46,24 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   visible: Boolean,
   member: Object,
 })
 const emit = defineEmits(['close'])
+
 function close() {
   emit('close')
+}
+
+// 处理照片加载错误
+const handlePhotoError = (event) => {
+  event.target.src = '/src/assets/img/default-avatar.svg'
+}
+
+// 处理头像加载错误
+const handleAvatarError = (event) => {
+  event.target.src = '/src/assets/img/default-avatar.svg'
 }
 </script>
 
@@ -135,6 +158,12 @@ function close() {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
   background: #fafbfc;
 }
+
+.photo[src*='default-avatar'] {
+  object-fit: contain;
+  padding: 30px;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+}
 .avatar {
   width: 60px;
   height: 60px;
@@ -144,6 +173,12 @@ function close() {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   background: #fafbfc;
   margin-right: 18px;
+}
+
+.avatar[src*='default-avatar'] {
+  object-fit: contain;
+  padding: 8px;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
 }
 .header-row {
   display: flex;
@@ -208,6 +243,10 @@ function close() {
     width: 160px;
     height: 160px;
   }
+
+  .photo[src*='default-avatar'] {
+    padding: 20px;
+  }
   .header-row {
     margin-bottom: 6px;
     justify-content: center;
@@ -216,6 +255,10 @@ function close() {
     width: 48px;
     height: 48px;
     margin-right: 12px;
+  }
+
+  .avatar[src*='default-avatar'] {
+    padding: 6px;
   }
 }
 </style>
