@@ -12,12 +12,11 @@ const myArticleStore = useMyArticleStore()
 const userStore = useUserStore()
 const articleList = computed(() => myArticleStore.myArticles)
 const total = computed(() => myArticleStore.myTotal)
-const loading = computed(() => myArticleStore.myLoading)
 
 // 定义请求参数对象
 const params = ref({
   pagenum: 1, // 当前页
-  pagesize: 5, // 当前生效的每页条数
+  pagesize: 6, // 固定每页6个
   state: '',
 })
 
@@ -34,12 +33,7 @@ onMounted(() => {
   getArticleList()
 })
 
-// 处理分页逻辑
-const onSizeChange = (size) => {
-  params.value.pagenum = 1
-  params.value.pagesize = size
-  myArticleStore.paginateArticles(params.value.pagenum, params.value.pagesize)
-}
+// 处理分页逻辑 - 移除size change，因为固定每页6个
 const onCurrentChange = (page) => {
   params.value.pagenum = page
   myArticleStore.paginateArticles(params.value.pagenum, params.value.pagesize)
@@ -69,7 +63,7 @@ const onEditArticle = (row) => {
 }
 
 // 删除逻辑
-const onDeleteArticle = async (row) => {
+const onDeleteArticle = async () => {
   await ElMessageBox.confirm('此操作将永久删除该文件, 是否继续?', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
@@ -108,6 +102,9 @@ const onSuccess = (type) => {
       <el-form-item>
         <el-button @click="onSearch" type="primary">搜索</el-button>
         <el-button @click="onReset">重置</el-button>
+      </el-form-item>
+      <el-form-item style="margin-left: auto">
+        <span style="color: #666; font-size: 14px">共 {{ total }} 篇文章</span>
       </el-form-item>
     </el-form>
 
@@ -172,14 +169,15 @@ const onSuccess = (type) => {
     <!-- 分页区域 -->
     <el-pagination
       v-model:current-page="params.pagenum"
-      v-model:page-size="params.pagesize"
-      :page-sizes="[2, 3, 5, 10]"
+      :page-size="6"
       :background="true"
-      layout="jumper, total, sizes, prev, pager, next"
+      layout="prev, pager, next"
       :total="total"
-      @size-change="onSizeChange"
       @current-change="onCurrentChange"
-      style="margin-top: 20px; justify-content: flex-end"
+      style="position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%)"
+      :pager-count="5"
+      prev-text="上一页"
+      next-text="下一页"
     />
 
     <!-- 添加编辑的抽屉 -->

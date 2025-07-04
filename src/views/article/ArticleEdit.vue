@@ -127,9 +127,6 @@ defineExpose({
       <el-form-item label="文章标题" prop="title">
         <el-input v-model="formModel.title" placeholder="请输入标题"></el-input>
       </el-form-item>
-      <el-form-item label="文章分类" prop="cate_id">
-        <channel-select v-model="formModel.cate_id" width="100%"></channel-select>
-      </el-form-item>
       <el-form-item label="文章封面" prop="cover_img">
         <!-- 此处需要关闭 element-plus 的自动上传，不需要配置 action 等参数
              只需要做前端的本地预览图片即可，无需在提交前上传图标
