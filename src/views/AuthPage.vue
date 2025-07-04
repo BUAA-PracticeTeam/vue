@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/modules/user.js'
 import { defineOptions } from 'vue'
+import { ElMessage } from 'element-plus'
 
 defineOptions({
   name: 'AuthPage',
@@ -141,25 +142,27 @@ const handleSignIn = async () => {
 
 // 注册处理
 const handleSignUp = async () => {
-  if (!validateSignUpForm()) return
+  // if (!validateSignUpForm()) return
 
-  const result = await userStore.register({
-    username: signUpForm.value.username,
-    email: signUpForm.value.email,
-    password: signUpForm.value.password,
-  })
+  // const result = await userStore.register({
+  //   username: signUpForm.value.username,
+  //   email: signUpForm.value.email,
+  //   password: signUpForm.value.password,
+  // })
 
-  if (result.success) {
-    // 注册成功后切换到登录面板
-    isSignUpActive.value = false
-    // 清空注册表单
-    signUpForm.value = {
-      username: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-    }
-  }
+  // if (result.success) {
+  //   // 注册成功后切换到登录面板
+  //   isSignUpActive.value = false
+  //   // 清空注册表单
+  //   signUpForm.value = {
+  //     username: '',
+  //     email: '',
+  //     password: '',
+  //     confirmPassword: '',
+  //   }
+  // }
+  ElMessage.warning('未启用注册功能，请联系管理员')
+  return
 }
 </script>
 
