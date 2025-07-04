@@ -18,7 +18,7 @@ export default defineComponent({
       <nav>
         <ul>
           <li>
-            <router-link to="/about">团队简介</router-link>
+            <router-link to="/about">首页</router-link>
           </li>
           <li>
             <router-link to="/team">队员介绍</router-link>

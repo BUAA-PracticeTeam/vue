@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { Plus, Upload, Picture } from '@element-plus/icons-vue'
-import { useUserStore } from '@/stores/modules/user.js'
+import { useUserStore } from '@/stores/user.js'
 import PageContainer from '@/components/PageContainer.vue'
 import { ElMessage } from 'element-plus'
 

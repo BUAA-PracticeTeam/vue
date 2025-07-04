@@ -1,10 +1,10 @@
 <script setup>
-import {ref} from 'vue'
-import {userUpdatePasswordService} from '@/api/user'
-import {useUserStore} from '@/stores'
-import {useRouter} from 'vue-router'
+import { ref } from 'vue'
+import { userUpdatePasswordService } from '@/api/user'
+import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router'
 import PageContainer from '@/components/PageContainer.vue'
-import {ElMessage} from 'element-plus'
+import { ElMessage } from 'element-plus'
 
 const formRef = ref()
 const pwdForm = ref({
@@ -31,18 +31,18 @@ const checkSameAsNewPwd = (rule, value, callback) => {
 }
 const rules = ref({
   old_pwd: [
-    {required: true, message: '请输入原密码', trigger: 'blur'},
-    {min: 6, max: 15, message: '原密码长度在6-15位之间', trigger: 'blur'},
+    { required: true, message: '请输入原密码', trigger: 'blur' },
+    { min: 6, max: 15, message: '原密码长度在6-15位之间', trigger: 'blur' },
   ],
   new_pwd: [
-    {required: true, message: '请输入新密码', trigger: 'blur'},
-    {min: 6, max: 15, message: '新密码长度在6-15位之间', trigger: 'blur'},
-    {validator: checkDifferent, trigger: 'blur'},
+    { required: true, message: '请输入新密码', trigger: 'blur' },
+    { min: 6, max: 15, message: '新密码长度在6-15位之间', trigger: 'blur' },
+    { validator: checkDifferent, trigger: 'blur' },
   ],
   re_pwd: [
-    {required: true, message: '请再次输入新密码', trigger: 'blur'},
-    {min: 6, max: 15, message: '确认密码长度在6-15位之间', trigger: 'blur'},
-    {validator: checkSameAsNewPwd, trigger: 'blur'},
+    { required: true, message: '请再次输入新密码', trigger: 'blur' },
+    { min: 6, max: 15, message: '确认密码长度在6-15位之间', trigger: 'blur' },
+    { validator: checkSameAsNewPwd, trigger: 'blur' },
   ],
 })
 
@@ -56,7 +56,7 @@ const submitForm = async () => {
     new_pwd: pwdForm.value.new_pwd,
     username: userStore.user.username,
   })
-  if(response.data.code !== 0) {
+  if (response.data.code !== 0) {
     ElMessage.error(response.data.msg)
     return
   }
@@ -90,8 +90,7 @@ const resetForm = () => {
             <el-button @click="resetForm">重置</el-button>
           </el-form-item>
         </el-form>
-      </el-col
-      >
+      </el-col>
     </el-row>
   </page-container>
 </template>

@@ -5,8 +5,8 @@ import ArticleEdit from './ArticleEdit.vue'
 import { formatTime } from '@/utils/format.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import PageContainer from '@/components/PageContainer.vue'
-import { useMyArticleStore } from '@/stores/modules/myArticle.js'
-import { useUserStore } from '@/stores/modules/user.js'
+import { useMyArticleStore } from '@/stores/myArticle.js'
+import { useUserStore } from '@/stores/user.js'
 
 const myArticleStore = useMyArticleStore()
 const userStore = useUserStore()

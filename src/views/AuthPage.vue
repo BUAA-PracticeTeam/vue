@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/modules/user.js'
+import { useUserStore } from '@/stores/user.js'
 import { defineOptions } from 'vue'
 import { ElMessage } from 'element-plus'
 

@@ -6,7 +6,7 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { artPublishService, artGetDetailService, artEditService } from '@/api/article'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-import { useUserStore } from '@/stores/modules/user.js'
+import { useUserStore } from '@/stores/user.js'
 // 控制抽屉显示隐藏
 const visibleDrawer = ref(false)
 

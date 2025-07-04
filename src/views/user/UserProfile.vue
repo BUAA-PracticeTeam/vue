@@ -1,7 +1,7 @@
 <script setup>
 import PageContainer from '@/components/PageContainer.vue'
 import { ref, computed } from 'vue'
-import { useUserStore } from '@/stores/modules/user.js'
+import { useUserStore } from '@/stores/user.js'
 import { User, UserFilled, Check, Refresh, Edit } from '@element-plus/icons-vue'
 
 const formRef = ref()

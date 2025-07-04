@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { useTeamStore } from '@/stores/modules/team.js'
+import { useTeamStore } from '@/stores/team.js'
 import TeamMemberDetail from '@/components/TeamMemberDetail.vue'
 import { defineOptions } from 'vue'
 import defaultAvatar from '../assets/img/default-avatar.svg'
