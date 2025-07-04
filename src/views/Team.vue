@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useTeamStore } from '@/stores/modules/team.js'
 import TeamMemberDetail from '@/components/TeamMemberDetail.vue'
 import { defineOptions } from 'vue'
+import defaultAvatar from '../assets/img/default-avatar.svg'
 
 // 组件名
 defineOptions({
@@ -39,7 +40,7 @@ const refresh = async () => {
 
 // 处理图片加载错误
 const handleImageError = (event) => {
-  event.target.src = '/src/assets/img/default-avatar.svg'
+  event.target.src = defaultAvatar
 }
 </script>
 
@@ -81,7 +82,7 @@ const handleImageError = (event) => {
         >
           <div class="member-image">
             <img
-              :src="member.photo || '/src/assets/img/default-avatar.svg'"
+              :src="member.photo || defaultAvatar"
               :alt="member.nickname || member.username"
               @error="handleImageError"
             />

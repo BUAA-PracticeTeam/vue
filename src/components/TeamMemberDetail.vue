@@ -7,7 +7,7 @@
           <div class="photo-col">
             <div class="photo-box">
               <img
-                :src="member.photo || '/src/assets/img/default-avatar.svg'"
+                :src="member.photo || defaultAvatar"
                 alt="个人照片"
                 class="photo"
                 @error="handlePhotoError"
@@ -17,7 +17,7 @@
           <div class="info-col">
             <div class="header-row">
               <img
-                :src="member.avatar || '/src/assets/img/default-avatar.svg'"
+                :src="member.avatar || defaultAvatar"
                 alt="头像"
                 class="avatar"
                 @error="handleAvatarError"
@@ -48,6 +48,7 @@
 </template>
 
 <script setup>
+import defaultAvatar from '../assets/img/default-avatar.svg'
 defineProps({
   visible: Boolean,
   member: Object,
@@ -60,12 +61,12 @@ function close() {
 
 // 处理照片加载错误
 const handlePhotoError = (event) => {
-  event.target.src = '/src/assets/img/default-avatar.svg'
+  event.target.src = defaultAvatar
 }
 
 // 处理头像加载错误
 const handleAvatarError = (event) => {
-  event.target.src = '/src/assets/img/default-avatar.svg'
+  event.target.src = defaultAvatar
 }
 </script>
 
