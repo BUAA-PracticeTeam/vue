@@ -21,7 +21,13 @@ export const useTeamStore = defineStore('team', () => {
         return { success: false, message: response.data.msg }
       }
 
-      teamMembers.value = response.data.members || []
+      const members = response.data.members || []
+      // 按priority字段从小到大排序
+      teamMembers.value = members.sort((a, b) => {
+        const priorityA = a.priority || 999 // 如果没有priority字段，默认优先级最低
+        const priorityB = b.priority || 999
+        return priorityA - priorityB
+      })
       return { success: true, data: teamMembers.value }
     } catch (error) {
       console.error('获取团队成员失败:', error)
