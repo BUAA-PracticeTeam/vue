@@ -1,8 +1,63 @@
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import * as echarts from 'echarts'
+import chinaGeoJson from '../assets/china.json'
 
 export default defineComponent({
   name: 'AboutPage',
+  setup() {
+    const aboutImages = [
+      new URL('@/assets/img/aboutBG.png', import.meta.url).href,
+      new URL('@/assets/img/aboutBG2.jpg', import.meta.url).href,
+    ]
+    const footprints = [
+      '2025年7月，赴云南省大理市支教、调研',
+      '2025年1月，赴湖北省恩施州社会调研',
+      '2024年7月，赴贵州省黔东南苗族侗族自治州乡村支教',
+      '2024年1月，赴山东省济南市环保宣传',
+      '2023年7月，赴北京市房山区社区服务',
+    ]
+    const chinaMap = ref(null)
+    onMounted(() => {
+      echarts.registerMap('china', chinaGeoJson)
+      const myChart = echarts.init(chinaMap.value)
+      myChart.setOption({
+        geo: {
+          map: 'china',
+          roam: true,
+          itemStyle: {
+            areaColor: '#e0e0e0',
+            borderColor: '#0288d1',
+            borderWidth: 1,
+          },
+          emphasis: {
+            itemStyle: {
+              areaColor: '#ffcc00',
+            },
+          },
+          regions: [
+            { name: '北京市', itemStyle: { areaColor: '#42a5f5' } },
+            { name: '云南省', itemStyle: { areaColor: '#42a5f5' } },
+            { name: '湖北省', itemStyle: { areaColor: '#42a5f5' } },
+            { name: '贵州省', itemStyle: { areaColor: '#42a5f5' } },
+            { name: '山东省', itemStyle: { areaColor: '#42a5f5' } },
+            { name: '甘肃省', itemStyle: { areaColor: '#42a5f5' } },
+            { name: '广东省', itemStyle: { areaColor: '#42a5f5' } },
+          ],
+        },
+        series: [
+          {
+            type: 'map',
+            map: 'china',
+            geoIndex: 0,
+            data: [],
+          },
+        ],
+      })
+      window.addEventListener('resize', () => myChart.resize())
+    })
+    return { aboutImages, footprints, chinaMap }
+  },
 })
 </script>
 
@@ -31,10 +86,29 @@ export default defineComponent({
           <p>
             我们的宗旨是："奉献、友爱、互助、进步"，希望通过我们的努力，能够为社会带来积极的改变，同时也让每一位队员在实践中成长、收获。
           </p>
-          <!-- 保持原有内容 -->
         </div>
         <div class="about-image">
-          <img src="../assets/img/aboutBG.png" alt="团队合影" />
+          <el-carousel height="320px" indicator-position="outside">
+            <el-carousel-item v-for="img in aboutImages" :key="img">
+              <img
+                :src="img"
+                alt="团队合影"
+                style="width: 100%; height: 320px; object-fit: cover; border-radius: 8px"
+              />
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+      </div>
+    </div>
+    <!-- 团队足迹卡片 -->
+    <div class="container">
+      <div class="section-title">
+        <h2>团队足迹</h2>
+      </div>
+      <div class="about-footprint-content">
+        <div ref="chinaMap" class="china-map"></div>
+        <div class="footprint-list">
+          <div class="footprint-item" v-for="item in footprints" :key="item">{{ item }}</div>
         </div>
       </div>
     </div>
@@ -164,5 +238,42 @@ export default defineComponent({
     order: -1;
     margin-bottom: 1.5rem;
   }
+}
+
+.about-footprint-content {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 2.5rem;
+}
+
+.china-map {
+  width: 420px;
+  height: 400px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(41, 137, 216, 0.08);
+  background: #f5faff;
+  flex-shrink: 0;
+}
+
+.footprint-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+  min-width: 260px;
+  text-align: left;
+}
+
+.footprint-item {
+  background: #e3f2fd;
+  color: #1565c0;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  font-size: 1.08rem;
+  box-shadow: 0 1px 4px rgba(41, 137, 216, 0.06);
+  font-weight: 500;
+  line-height: 1.6;
 }
 </style>
