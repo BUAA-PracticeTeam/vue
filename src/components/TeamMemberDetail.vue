@@ -27,7 +27,9 @@
             <p class="work">{{ member.work || '团队成员' }}</p>
             <el-descriptions :column="1" border class="info-table">
               <el-descriptions-item label="用户名">{{ member.username }}</el-descriptions-item>
-              <el-descriptions-item label="权限">{{ member.permission }}</el-descriptions-item>
+              <el-descriptions-item label="权限">{{
+                member.permission || '不告诉你'
+              }}</el-descriptions-item>
               <el-descriptions-item label="签名">{{
                 member.signature || '暂无签名'
               }}</el-descriptions-item>
