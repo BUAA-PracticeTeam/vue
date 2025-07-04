@@ -290,10 +290,10 @@ const submitForm = async () => {
   display: flex;
   gap: 20px;
   justify-content: center;
-  padding: 25px;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 0;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .submit-btn {

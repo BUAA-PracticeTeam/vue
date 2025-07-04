@@ -48,7 +48,8 @@ const router = useRouter()
     <el-container>
       <el-header>
         <div>
-          技术总监：<strong>{{ 'CircleCoder' }}</strong>
+          <!-- 技术：<strong>{{ 'CircleCoder冥鸿' }}</strong> -->
+          CircleCoder提醒您：当前版本未实现JWT鉴权，请不要使用常用的密码，以免泄露
         </div>
       </el-header>
       <el-main>
