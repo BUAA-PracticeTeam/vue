@@ -36,6 +36,11 @@ onMounted(async () => {
 const refresh = async () => {
   await teamStore.getTeamMembers()
 }
+
+// 处理图片加载错误
+const handleImageError = (event) => {
+  event.target.src = '/src/assets/img/default-avatar.svg'
+}
 </script>
 
 <template>
@@ -75,7 +80,11 @@ const refresh = async () => {
           style="cursor: pointer"
         >
           <div class="member-image">
-            <img :src="member.photo" :alt="member.nickname || member.username" />
+            <img
+              :src="member.photo || '/src/assets/img/default-avatar.svg'"
+              :alt="member.nickname || member.username"
+              @error="handleImageError"
+            />
           </div>
           <div class="member-info">
             <h3>{{ member.nickname || member.username }}</h3>
@@ -190,6 +199,13 @@ const refresh = async () => {
   height: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
+  background-color: #f5f5f5;
+}
+
+.member-image img[src*='default-avatar'] {
+  object-fit: contain;
+  padding: 20px;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
 }
 
 .member-card:hover .member-image img {
