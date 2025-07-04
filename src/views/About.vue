@@ -88,7 +88,7 @@ export default defineComponent({
           </p>
         </div>
         <div class="about-image">
-          <el-carousel height="320px" indicator-position="none">
+          <el-carousel height="320px" indicator-position="inside">
             <el-carousel-item v-for="img in aboutImages" :key="img">
               <img :src="img" alt="团队合影" />
             </el-carousel-item>
