@@ -210,7 +210,7 @@ const onUpdatePhoto = async () => {
 }
 
 .section-title {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4fc3f7 0%, #81d4fa 100%);
   color: white;
   margin: 0;
   padding: 20px;

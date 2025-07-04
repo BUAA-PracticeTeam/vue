@@ -32,11 +32,11 @@ const router = useRouter()
           <!-- 展开的内容 - 默认插槽 -->
           <el-menu-item index="/user/profile">
             <el-icon><User /></el-icon>
-            <span>基本资料</span>
+            <span>个人资料</span>
           </el-menu-item>
           <el-menu-item index="/user/avatar">
             <el-icon><Crop /></el-icon>
-            <span>更换头像</span>
+            <span>照片管理</span>
           </el-menu-item>
           <el-menu-item index="/user/password">
             <el-icon><EditPen /></el-icon>

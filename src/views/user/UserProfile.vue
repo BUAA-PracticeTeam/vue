@@ -230,20 +230,22 @@ const submitForm = async () => {
 }
 
 .panel-title {
+  background: linear-gradient(135deg, #4fc3f7 0%, #81d4fa 100%);
+  color: white;
+  margin: 0 0 20px 0;
+  padding: 20px;
   font-size: 18px;
   font-weight: 600;
-  color: #303133;
-  margin: 0 0 20px 0;
-  padding-bottom: 12px;
-  border-bottom: 3px solid #409eff;
   display: flex;
   align-items: center;
   gap: 10px;
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
 }
 
 .panel-title .el-icon {
   font-size: 24px;
-  color: #409eff;
+  color: white;
 }
 
 .basic-form,
