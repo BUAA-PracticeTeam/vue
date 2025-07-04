@@ -23,4 +23,4 @@ export const artGetDetailService = (id) =>
 export const artEditService = (data) => request.post('/my/article/edit', data)
 
 // 文章：删除文章接口
-export const artDelService = (id) => request.delete('/my/article/info', { params: { id } })
+export const artDelService = (id) => request.delete('/my/article/delete', { params: { id } })

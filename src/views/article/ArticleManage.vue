@@ -63,16 +63,21 @@ const onEditArticle = (row) => {
 }
 
 // 删除逻辑
-const onDeleteArticle = async () => {
-  await ElMessageBox.confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+const onDeleteArticle = async (row) => {
+  await ElMessageBox.confirm('此操作将永久删除该文章, 是否继续?', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning',
   })
-  // 这里应调用删除接口，删除后重新拉取所有文章
-  // await myArticleStore.deleteArticle(row.id) // 你可根据store实现
-  await getArticleList()
-  ElMessage.success('删除成功')
+
+  const result = await myArticleStore.deleteArticle(row.id)
+  if (result.success) {
+    // 删除成功后，重新分页显示
+    myArticleStore.paginateArticles(params.value.pagenum, params.value.pagesize)
+    ElMessage.success(result.message)
+  } else {
+    ElMessage.error(result.message)
+  }
 }
 
 // 添加或者编辑 成功的回调

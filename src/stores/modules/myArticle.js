@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { artGetMyListService } from '@/api/article.js'
+import { artGetMyListService, artDelService } from '@/api/article.js'
 
 export const useMyArticleStore = defineStore('myArticle', () => {
   // 当前用户的所有文章（一次性拉取）
@@ -30,6 +30,24 @@ export const useMyArticleStore = defineStore('myArticle', () => {
     myArticles.value = allMyArticles.value.slice(start, end)
   }
 
+  // 删除文章
+  const deleteArticle = async (id) => {
+    try {
+      const res = await artDelService(id)
+      if (res.data.error_num === 0) {
+        // 删除成功后，从本地数组中移除该文章
+        allMyArticles.value = allMyArticles.value.filter((article) => article.id !== id)
+        myTotal.value = allMyArticles.value.length
+        return { success: true, message: '删除成功' }
+      } else {
+        return { success: false, message: res.data.msg || '删除失败' }
+      }
+    } catch (error) {
+      console.error('删除文章失败:', error)
+      return { success: false, message: '删除失败，请稍后重试' }
+    }
+  }
+
   return {
     allMyArticles,
     myArticles,
@@ -37,5 +55,6 @@ export const useMyArticleStore = defineStore('myArticle', () => {
     myLoading,
     fetchAllMyArticles,
     paginateArticles,
+    deleteArticle,
   }
 })
