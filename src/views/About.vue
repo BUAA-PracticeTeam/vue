@@ -2,9 +2,15 @@
 import { defineComponent, ref, onMounted } from 'vue'
 import * as echarts from 'echarts'
 import chinaGeoJson from '../assets/china.json'
+import ChatBot from '@/components/ChatBot.vue'
+import ChatWindow from '@/components/ChatWindow.vue'
 
 export default defineComponent({
   name: 'AboutPage',
+  components: {
+    ChatBot,
+    ChatWindow,
+  },
   setup() {
     const aboutImages = [
       new URL('@/assets/img/aboutBG.png', import.meta.url).href,
@@ -18,6 +24,16 @@ export default defineComponent({
       '2023年7月，赴北京市房山区社区服务',
     ]
     const chinaMap = ref(null)
+    const isChatOpen = ref(false)
+
+    const handleToggleChat = (open) => {
+      isChatOpen.value = open
+    }
+
+    const handleCloseChat = () => {
+      isChatOpen.value = false
+    }
+
     onMounted(() => {
       echarts.registerMap('china', chinaGeoJson)
       const myChart = echarts.init(chinaMap.value)
@@ -56,7 +72,14 @@ export default defineComponent({
       })
       window.addEventListener('resize', () => myChart.resize())
     })
-    return { aboutImages, footprints, chinaMap }
+    return {
+      aboutImages,
+      footprints,
+      chinaMap,
+      isChatOpen,
+      handleToggleChat,
+      handleCloseChat,
+    }
   },
 })
 </script>
@@ -108,6 +131,10 @@ export default defineComponent({
         </div>
       </div>
     </div>
+
+    <!-- 聊天小人和聊天窗口 -->
+    <ChatBot @toggle-chat="handleToggleChat" />
+    <ChatWindow :is-open="isChatOpen" @close="handleCloseChat" />
   </div>
 </template>
 
