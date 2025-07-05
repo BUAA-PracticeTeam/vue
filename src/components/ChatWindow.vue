@@ -7,7 +7,7 @@
           <div class="chat-window__avatar-icon">🤖</div>
         </div>
         <div class="chat-window__header-text">
-          <h3 class="chat-window__title">AI 助手</h3>
+          <h3 class="chat-window__title">蒲公英乡野航迹实践队 AI 助手</h3>
           <p class="chat-window__status">在线 · 随时为您服务</p>
         </div>
       </div>
@@ -52,7 +52,7 @@
         <!-- 用户消息 -->
         <div class="chat-window__message chat-window__message--user">
           <div class="chat-window__message-avatar">
-            <div class="chat-window__message-avatar-icon">👤</div>
+            <img :src="userAvatar" alt="我的头像" class="user-avatar-img" />
           </div>
           <div class="chat-window__message-content">
             <div class="chat-window__message-bubble">
@@ -131,7 +131,9 @@
 </template>
 
 <script setup>
-import { ref, nextTick, watch, onMounted } from 'vue'
+import { ref, nextTick, watch, onMounted, computed } from 'vue'
+import { useUserStore } from '@/stores/user.js'
+import defaultAvatar from '@/assets/img/default-avatar.svg'
 
 const props = defineProps({
   isOpen: {
@@ -145,7 +147,7 @@ const emit = defineEmits(['close'])
 const inputMessage = ref('')
 const messages = ref([
   {
-    content: '你好！我是您的AI助手，有什么可以帮助您的吗？',
+    content: '你好！我是 CircleCoder 为您提供的 AI 助手，有什么可以帮助您的吗？',
     timestamp: new Date(),
   },
 ])
@@ -153,6 +155,8 @@ const conversationHistory = ref([])
 const isTyping = ref(false)
 const messagesContainer = ref(null)
 const inputRef = ref(null)
+const userStore = useUserStore()
+const userAvatar = computed(() => userStore.user.avatar || defaultAvatar)
 
 // 格式化时间
 const formatTime = (timestamp) => {
@@ -237,12 +241,13 @@ const scrollToBottom = () => {
 // 简单的AI回复逻辑
 const getBotResponse = () => {
   const responses = [
-    '我理解您的问题，让我为您详细解答...',
-    '这是一个很有趣的问题！',
-    '根据我的分析，我建议您...',
-    '谢谢您的提问，我会尽力帮助您。',
-    '我明白您的需求，让我为您提供一些建议...',
-    '这是一个很好的观点，让我从另一个角度为您分析...',
+    // '我理解您的问题，让我为您详细解答...',
+    // '这是一个很有趣的问题！',
+    // '根据我的分析，我建议您...',
+    // '谢谢您的提问，我会尽力帮助您。',
+    // '我明白您的需求，让我为您提供一些建议...',
+    // '这是一个很好的观点，让我从另一个角度为您分析...',
+    '蒲公英乡野航迹实践队成立于2023年，是一支由北京航空航天大学计算机学院自发组织的志愿服务团队。我们致力于社会调研、乡村支教、环境保护等公益实践活动，旨在通过实际行动服务社会、锻炼自我。',
   ]
   return responses[Math.floor(Math.random() * responses.length)]
 }
@@ -287,8 +292,8 @@ onMounted(() => {
   position: fixed;
   bottom: 120px;
   right: 30px;
-  width: 380px;
-  height: 500px;
+  width: 580px;
+  height: 700px;
   background: white;
   border-radius: 16px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
@@ -446,11 +451,13 @@ onMounted(() => {
   word-wrap: break-word;
   display: inline-block;
   max-width: 100%;
+  text-align: left;
 }
 
 .chat-window__message--user .chat-window__message-bubble {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  text-align: left;
 }
 
 .chat-window__message-bubble--typing {
@@ -581,5 +588,12 @@ onMounted(() => {
   .chat-window__message-content {
     max-width: 80%;
   }
+}
+
+.user-avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 </style>
