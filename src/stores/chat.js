@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { fetchAIChat } from '@/api/chat.js'
 
 export const useChatStore = defineStore(
   'chat',
@@ -62,11 +63,29 @@ export const useChatStore = defineStore(
       return conversationHistory.value.length > 0
     }
 
+    // 获取AI回复（调用后端接口）
+    const getAIResponse = async (userMessage) => {
+      try {
+        const response = await fetchAIChat(userMessage, conversationHistory.value)
+
+        if (response.data && response.data.success) {
+          return response.data.content
+        } else {
+          console.error('AI回复失败:', response.data?.message || '未知错误')
+          return '抱歉，AI助手暂时无法回复，请稍后再试。'
+        }
+      } catch (error) {
+        console.error('AI回复请求失败:', error)
+        return '抱歉，网络连接异常，请检查网络后重试。'
+      }
+    }
+
     return {
       welcomeMessage,
       conversationHistory,
       addUserMessage,
       addBotMessage,
+      getAIResponse,
       getConversationHistory,
       getWelcomeMessage,
       clearConversationHistory,

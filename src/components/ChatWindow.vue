@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-window" :class="{ 'chat-window--open': isOpen }">
+  <div class="chat-window" :class="{ 'chat-window--open': isOpen }" v-show="isOpen">
     <!-- 聊天窗口头部 -->
     <div class="chat-window__header">
       <div class="chat-window__header-info">
