@@ -11,19 +11,42 @@
           <p class="chat-window__status">在线 · 随时为您服务</p>
         </div>
       </div>
-      <button class="chat-window__close" @click="closeChat">
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
+      <div class="chat-window__header-actions">
+        <!-- 清空对话按钮 -->
+        <button
+          v-if="chatStore.hasConversationHistory()"
+          class="chat-window__clear-btn"
+          @click="clearConversation"
+          title="清空对话"
         >
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M3 6h18"></path>
+            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+          </svg>
+        </button>
+        <!-- 关闭按钮 -->
+        <button class="chat-window__close" @click="closeChat">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- 消息列表 -->
@@ -133,6 +156,7 @@
 <script setup>
 import { ref, nextTick, watch, onMounted, computed } from 'vue'
 import { useUserStore } from '@/stores/user.js'
+import { useChatStore } from '@/stores/chat.js'
 import defaultAvatar from '@/assets/img/default-avatar.svg'
 
 const props = defineProps({
@@ -145,18 +169,16 @@ const props = defineProps({
 const emit = defineEmits(['close'])
 
 const inputMessage = ref('')
-const messages = ref([
-  {
-    content: '你好！我是 CircleCoder 为您提供的 AI 助手，有什么可以帮助您的吗？',
-    timestamp: new Date(),
-  },
-])
-const conversationHistory = ref([])
 const isTyping = ref(false)
 const messagesContainer = ref(null)
 const inputRef = ref(null)
 const userStore = useUserStore()
+const chatStore = useChatStore()
 const userAvatar = computed(() => userStore.user.avatar || defaultAvatar)
+
+// 从 store 获取数据
+const messages = computed(() => [chatStore.getWelcomeMessage()])
+const conversationHistory = computed(() => chatStore.getConversationHistory())
 
 // 格式化时间
 const formatTime = (timestamp) => {
@@ -182,18 +204,11 @@ const formatTime = (timestamp) => {
 const sendMessage = async () => {
   if (!inputMessage.value.trim()) return
 
-  const userMessage = {
-    content: inputMessage.value.trim(),
-    timestamp: new Date(),
-  }
-
+  const messageContent = inputMessage.value.trim()
   inputMessage.value = ''
 
-  // 立即显示用户消息
-  conversationHistory.value.push({
-    userMessage,
-    botMessage: null, // 先设为null，等AI回复后再更新
-  })
+  // 使用 store 添加用户消息
+  chatStore.addUserMessage(messageContent)
 
   await nextTick()
   scrollToBottom()
@@ -206,14 +221,9 @@ const sendMessage = async () => {
   // 模拟AI回复延迟
   setTimeout(() => {
     isTyping.value = false
-    const botMessage = {
-      content: getBotResponse(),
-      timestamp: new Date(),
-    }
 
-    // 更新最后一条对话的AI回复
-    const lastConversation = conversationHistory.value[conversationHistory.value.length - 1]
-    lastConversation.botMessage = botMessage
+    // 使用 store 添加AI回复
+    chatStore.addBotMessage(getBotResponse())
 
     nextTick(() => {
       scrollToBottom()
@@ -229,6 +239,13 @@ const newLine = () => {
 // 关闭聊天
 const closeChat = () => {
   emit('close')
+}
+
+// 清空对话
+const clearConversation = () => {
+  if (confirm('确定要清空所有对话记录吗？此操作不可恢复。')) {
+    chatStore.clearConversationHistory()
+  }
 }
 
 // 滚动到底部
@@ -360,6 +377,13 @@ onMounted(() => {
   opacity: 0.8;
 }
 
+.chat-window__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat-window__clear-btn,
 .chat-window__close {
   background: none;
   border: none;
@@ -373,8 +397,17 @@ onMounted(() => {
   justify-content: center;
 }
 
+.chat-window__clear-btn:hover,
 .chat-window__close:hover {
   background: rgba(255, 255, 255, 0.1);
+}
+
+.chat-window__clear-btn {
+  opacity: 0.8;
+}
+
+.chat-window__clear-btn:hover {
+  opacity: 1;
 }
 
 /* 消息列表 */
