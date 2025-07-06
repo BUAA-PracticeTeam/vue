@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { fetchAIChat } from '@/api/chat.js'
+import { fetchAIChat, fetchAIChatStream } from '@/api/chat.js'
 
 export const useChatStore = defineStore(
   'chat',
@@ -84,12 +84,33 @@ export const useChatStore = defineStore(
       }
     }
 
+    // 获取AI流式回复
+    const getAIResponseStream = async (userMessage, onChunk, onDone, onError) => {
+      try {
+        console.log('开始流式请求AI回复:', userMessage)
+
+        const fullContent = await fetchAIChatStream(
+          userMessage,
+          conversationHistory.value,
+          onChunk, // 接收内容片段
+          onDone, // 流结束
+          onError, // 错误处理
+        )
+
+        return fullContent
+      } catch (error) {
+        console.error('AI流式回复请求失败:', error)
+        return '抱歉，网络连接异常，请检查网络后重试。'
+      }
+    }
+
     return {
       welcomeMessage,
       conversationHistory,
       addUserMessage,
       addBotMessage,
       getAIResponse,
+      getAIResponseStream,
       getConversationHistory,
       getWelcomeMessage,
       clearConversationHistory,

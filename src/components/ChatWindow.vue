@@ -218,17 +218,53 @@ const sendMessage = async () => {
   await nextTick()
   scrollToBottom()
 
-  // 调用真实的AI回复
+  // 调用流式AI回复
   try {
-    const aiResponse = await chatStore.getAIResponse(messageContent)
-    isTyping.value = false
+    // 先添加一个空的AI消息
+    chatStore.addBotMessage('')
 
-    // 使用 store 添加AI回复
-    chatStore.addBotMessage(aiResponse)
-
-    nextTick(() => {
-      scrollToBottom()
-    })
+    await chatStore.getAIResponseStream(
+      messageContent,
+      // 接收内容片段
+      (chunk, fullContent) => {
+        // 更新最后一条AI消息
+        if (chatStore.conversationHistory.length > 0) {
+          const lastConversation =
+            chatStore.conversationHistory[chatStore.conversationHistory.length - 1]
+          if (lastConversation.botMessage) {
+            lastConversation.botMessage.content = fullContent
+          }
+        }
+        nextTick(() => {
+          scrollToBottom()
+        })
+      },
+      // 流结束
+      (fullContent) => {
+        console.log('流式回复完成:', fullContent)
+        isTyping.value = false
+        nextTick(() => {
+          scrollToBottom()
+        })
+      },
+      // 错误处理
+      (error) => {
+        console.error('流式回复错误:', error)
+        isTyping.value = false
+        // 更新错误消息
+        if (chatStore.conversationHistory.length > 0) {
+          const lastConversation =
+            chatStore.conversationHistory[chatStore.conversationHistory.length - 1]
+          if (lastConversation.botMessage) {
+            lastConversation.botMessage.content =
+              '抱歉，我现在无法为您提供回复。请稍后再试，或者联系我们的团队成员获取帮助。'
+          }
+        }
+        nextTick(() => {
+          scrollToBottom()
+        })
+      },
+    )
   } catch (error) {
     console.error('AI回复失败:', error)
     isTyping.value = false
