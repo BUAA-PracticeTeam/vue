@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { artGetDetailService } from '@/api/article'
 import { ElSkeleton, ElIcon } from 'element-plus'
@@ -15,6 +15,11 @@ const fetchArticle = async () => {
   try {
     const res = await artGetDetailService(route.params.id)
     article.value = res.data.data
+
+    // 在内容渲染后初始化轮播图功能
+    nextTick(() => {
+      initCarousels()
+    })
   } catch (error) {
     console.error('Failed to fetch article:', error)
   } finally {
@@ -22,9 +27,100 @@ const fetchArticle = async () => {
   }
 }
 
+// 初始化轮播图功能
+const initCarousels = () => {
+  console.log('初始化轮播图...')
+  const carousels = document.querySelectorAll('.carousel')
+  console.log('找到轮播图数量:', carousels.length)
+
+  carousels.forEach((carousel, index) => {
+    const container = carousel.querySelector('.carousel-container')
+    const dots = carousel.querySelectorAll('.dot')
+    const images = carousel.querySelectorAll('img')
+
+    console.log(`轮播图${index + 1}:`, {
+      container: !!container,
+      dotsCount: dots.length,
+      imagesCount: images.length,
+    })
+
+    if (!container || dots.length === 0 || images.length === 0) {
+      console.log(`轮播图${index + 1} 缺少必要元素，跳过`)
+      return
+    }
+
+    let currentSlide = 0
+    const totalSlides = images.length
+
+    // 确保容器宽度正确
+    container.style.width = `${totalSlides * 100}%`
+
+    // 更新轮播图显示
+    const updateCarousel = () => {
+      const translateX = -(currentSlide * 33.333) // 每张图片占33.333%
+      container.style.transform = `translateX(${translateX}%)`
+
+      // 更新圆点状态
+      dots.forEach((dot, dotIndex) => {
+        dot.classList.toggle('active', dotIndex === currentSlide)
+      })
+
+      console.log(`轮播图${index + 1} 切换到第${currentSlide + 1}张`)
+    }
+
+    // 下一张
+    const nextSlide = () => {
+      currentSlide = (currentSlide + 1) % totalSlides
+      updateCarousel()
+    }
+
+    // 绑定圆点点击事件
+    dots.forEach((dot, dotIndex) => {
+      dot.addEventListener('click', () => {
+        currentSlide = dotIndex
+        updateCarousel()
+      })
+    })
+
+    // 初始化显示
+    updateCarousel()
+
+    // 自动播放
+    let autoPlayInterval = setInterval(nextSlide, 3000)
+
+    // 鼠标悬停时暂停自动播放
+    carousel.addEventListener('mouseenter', () => {
+      clearInterval(autoPlayInterval)
+    })
+
+    // 鼠标离开时恢复自动播放
+    carousel.addEventListener('mouseleave', () => {
+      autoPlayInterval = setInterval(nextSlide, 3000)
+    })
+
+    console.log(`轮播图${index + 1} 初始化完成，自动播放已启动`)
+  })
+}
+
 onMounted(() => {
   fetchArticle()
 })
+
+// 监听文章内容变化，初始化轮播图
+watch(
+  () => article.value?.content,
+  (newContent) => {
+    if (newContent) {
+      // 等待DOM更新后初始化轮播图
+      nextTick(() => {
+        setTimeout(() => {
+          initCarousels()
+        }, 100)
+      })
+    }
+  },
+  { immediate: true },
+)
 
 const goBack = () => {
   router.back()
@@ -285,5 +381,66 @@ const goBack = () => {
   font-size: 1rem;
   color: #888;
   z-index: 20;
+}
+
+/* 轮播图样式 */
+:deep(.carousel) {
+  margin: 20px 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  width: 100%;
+  height: 400px;
+}
+
+:deep(.carousel-container) {
+  display: flex;
+  transition: transform 0.5s ease;
+  width: 300%; /* 三张图片的宽度 */
+  height: 100%;
+}
+
+:deep(.carousel-container img) {
+  width: 33.333%; /* 每张图片占容器的1/3 */
+  height: 400px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+:deep(.carousel-dots) {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+:deep(.dot) {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+:deep(.dot.active) {
+  background: white;
+}
+
+.test-carousel {
+  margin-top: 40px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 2px dashed #dee2e6;
+}
+
+.test-carousel h3 {
+  margin-bottom: 20px;
+  color: #666;
+  text-align: center;
 }
 </style>
