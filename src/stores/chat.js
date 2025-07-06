@@ -66,9 +66,12 @@ export const useChatStore = defineStore(
     // 获取AI回复（调用后端接口）
     const getAIResponse = async (userMessage) => {
       try {
+        console.log('开始请求AI回复:', userMessage)
         const response = await fetchAIChat(userMessage, conversationHistory.value)
+        console.log('收到后端响应:', response)
 
         if (response.data && response.data.success) {
+          console.log('AI回复成功:', response.data.content.substring(0, 100) + '...')
           return response.data.content
         } else {
           console.error('AI回复失败:', response.data?.message || '未知错误')
@@ -76,6 +79,7 @@ export const useChatStore = defineStore(
         }
       } catch (error) {
         console.error('AI回复请求失败:', error)
+        console.error('错误详情:', error.response?.data || error.message)
         return '抱歉，网络连接异常，请检查网络后重试。'
       }
     }

@@ -218,17 +218,30 @@ const sendMessage = async () => {
   await nextTick()
   scrollToBottom()
 
-  // 模拟AI回复延迟
-  setTimeout(() => {
+  // 调用真实的AI回复
+  try {
+    const aiResponse = await chatStore.getAIResponse(messageContent)
     isTyping.value = false
 
     // 使用 store 添加AI回复
-    chatStore.addBotMessage(getBotResponse())
+    chatStore.addBotMessage(aiResponse)
 
     nextTick(() => {
       scrollToBottom()
     })
-  }, 1500)
+  } catch (error) {
+    console.error('AI回复失败:', error)
+    isTyping.value = false
+
+    // 使用备用回复
+    chatStore.addBotMessage(
+      '抱歉，我现在无法为您提供回复。请稍后再试，或者联系我们的团队成员获取帮助。',
+    )
+
+    nextTick(() => {
+      scrollToBottom()
+    })
+  }
 }
 
 // 换行
@@ -255,19 +268,13 @@ const scrollToBottom = () => {
   }
 }
 
-// 简单的AI回复逻辑
-const getBotResponse = () => {
-  const responses = [
-    // '我理解您的问题，让我为您详细解答...',
-    // '这是一个很有趣的问题！',
-    // '根据我的分析，我建议您...',
-    // '谢谢您的提问，我会尽力帮助您。',
-    // '我明白您的需求，让我为您提供一些建议...',
-    // '这是一个很好的观点，让我从另一个角度为您分析...',
-    '蒲公英乡野航迹实践队成立于2023年，是一支由北京航空航天大学计算机学院自发组织的志愿服务团队。我们致力于社会调研、乡村支教、环境保护等公益实践活动，旨在通过实际行动服务社会、锻炼自我。',
-  ]
-  return responses[Math.floor(Math.random() * responses.length)]
-}
+// 备用AI回复逻辑（已废弃，现在使用真实的AI API）
+// const getBotResponse = () => {
+//   const responses = [
+//     '蒲公英乡野航迹实践队成立于2023年，是一支由北京航空航天大学计算机学院自发组织的志愿服务团队。我们致力于社会调研、乡村支教、环境保护等公益实践活动，旨在通过实际行动服务社会、锻炼自我。',
+//   ]
+//   return responses[Math.floor(Math.random() * responses.length)]
+// }
 
 // 监听聊天窗口打开状态
 watch(
