@@ -18,11 +18,13 @@ export default defineComponent({
   setup() {
     // 精选的5张高质量图片
     const images = [
-      'https://images.unsplash.com/photo-1521791055366-0d553872125f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1521791055366-0d553872125f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+      'https://circlecoder05.oss-cn-beijing.aliyuncs.com/test/202507062001254.JPG',
+      'https://circlecoder05.oss-cn-beijing.aliyuncs.com/test/202507062002062.JPG',
+      'https://circlecoder05.oss-cn-beijing.aliyuncs.com/test/202507062003892.JPG',
+      'https://circlecoder05.oss-cn-beijing.aliyuncs.com/test/202507062003464.JPG',
+      'https://circlecoder05.oss-cn-beijing.aliyuncs.com/test/202507062004430.JPG',
+      'https://circlecoder05.oss-cn-beijing.aliyuncs.com/test/202507062004031.JPG',
+      'https://circlecoder05.oss-cn-beijing.aliyuncs.com/test/202507062005352.JPG',
     ]
 
     // 为了无缝循环，需要重复图片
@@ -71,7 +73,7 @@ export default defineComponent({
 }
 
 .carousel-list img {
-  width: 200px;
+  width: 300px;
   height: 200px;
   object-fit: cover;
   display: block;
@@ -88,7 +90,7 @@ export default defineComponent({
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-1000px); /* 5张图片的宽度 */
+    transform: translateX(-2100px); /* 7张图片的宽度 */
   }
 }
 
@@ -104,7 +106,7 @@ export default defineComponent({
   }
 
   .carousel-list img {
-    width: 150px;
+    width: 220px;
     height: 150px;
   }
 
@@ -113,7 +115,7 @@ export default defineComponent({
       transform: translateX(0);
     }
     100% {
-      transform: translateX(-750px); /* 5张图片的宽度 */
+      transform: translateX(-1540px); /* 7张图片的宽度 */
     }
   }
 }
@@ -125,7 +127,7 @@ export default defineComponent({
   }
 
   .carousel-list img {
-    width: 120px;
+    width: 180px;
     height: 120px;
   }
 
@@ -134,7 +136,7 @@ export default defineComponent({
       transform: translateX(0);
     }
     100% {
-      transform: translateX(-600px); /* 5张图片的宽度 */
+      transform: translateX(-1260px); /* 7张图片的宽度 */
     }
   }
 }
