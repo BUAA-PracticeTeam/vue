@@ -51,18 +51,40 @@ export default defineComponent({
 .carousel-box {
   width: 100%;
   height: 200px;
-  border: 3px solid #2989d8;
-  border-radius: 12px;
+  border: 2px solid #333;
   overflow: hidden;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  box-shadow: 0 8px 32px rgba(41, 137, 216, 0.15);
+  background: #333;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.carousel-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 15px;
+  background: repeating-linear-gradient(90deg, #333 0px, #333 15px, #e0e0e0 15px, #e0e0e0 25px);
+  z-index: 2;
+}
+
+.carousel-box::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 15px;
+  background: repeating-linear-gradient(90deg, #333 0px, #333 15px, #e0e0e0 15px, #e0e0e0 25px);
+  z-index: 2;
 }
 
 .carousel-list {
   display: flex;
   animation: move 12s infinite linear;
   margin: 0;
-  padding: 0;
+  padding: 15px 0;
   list-style: none;
 }
 
@@ -74,7 +96,7 @@ export default defineComponent({
 
 .carousel-list img {
   width: 300px;
-  height: 200px;
+  height: 170px;
   object-fit: cover;
   display: block;
   border-right: 2px solid rgba(255, 255, 255, 0.3);
@@ -107,7 +129,7 @@ export default defineComponent({
 
   .carousel-list img {
     width: 220px;
-    height: 150px;
+    height: 120px;
   }
 
   @keyframes move {
@@ -128,7 +150,7 @@ export default defineComponent({
 
   .carousel-list img {
     width: 180px;
-    height: 120px;
+    height: 100px;
   }
 
   @keyframes move {
