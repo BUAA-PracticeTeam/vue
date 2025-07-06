@@ -65,7 +65,7 @@ const initCarousels = () => {
         dot.classList.toggle('active', dotIndex === currentSlide)
       })
 
-      console.log(`轮播图${index + 1} 切换到第${currentSlide + 1}张`)
+      // console.log(`轮播图${index + 1} 切换到第${currentSlide + 1}张`)
     }
 
     // 下一张
