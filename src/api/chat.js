@@ -32,16 +32,20 @@ export const fetchAIChatStream = async (
   return new Promise((resolve, reject) => {
     try {
       // 创建POST请求获取流式响应
-      fetch('http://127.0.0.1:8000/api/ai_chat/stream/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      fetch(
+        // 'http://127.0.0.1:8000/api/ai_chat/stream/',
+        'http://47.93.81.21:8000/api/ai_chat/stream/',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_message: userMessage,
+            history: conversationHistory,
+          }),
         },
-        body: JSON.stringify({
-          user_message: userMessage,
-          history: conversationHistory,
-        }),
-      })
+      )
         .then((response) => {
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`)
