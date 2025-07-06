@@ -4,12 +4,14 @@ import * as echarts from 'echarts'
 import chinaGeoJson from '../assets/china.json'
 import ChatBot from '@/components/ChatBot.vue'
 import ChatWindow from '@/components/ChatWindow.vue'
+import ImageCarousel from '@/components/ImageCarousel.vue'
 
 export default defineComponent({
   name: 'AboutPage',
   components: {
     ChatBot,
     ChatWindow,
+    ImageCarousel,
   },
   setup() {
     const aboutImages = [
@@ -141,6 +143,10 @@ export default defineComponent({
         </div>
       </section>
     </div>
+
+    <!-- 走马灯图片展示 -->
+    <ImageCarousel />
+
     <div class="container">
       <div class="section-title">
         <h2>团队简介</h2>
