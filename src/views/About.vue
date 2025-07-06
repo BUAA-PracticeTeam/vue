@@ -1,5 +1,5 @@
 <script>
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
 import chinaGeoJson from '../assets/china.json'
 import ChatBot from '@/components/ChatBot.vue'
@@ -25,6 +25,11 @@ export default defineComponent({
     ]
     const chinaMap = ref(null)
     const isChatOpen = ref(false)
+    const typewriterText = ref('')
+    const fullText = '心随风扬 奔赴希望'
+    let typewriterInterval = null
+    let isDeleting = false
+    let currentIndex = 0
 
     const handleToggleChat = (open) => {
       isChatOpen.value = open
@@ -34,7 +39,39 @@ export default defineComponent({
       isChatOpen.value = false
     }
 
+    const startTypewriter = () => {
+      typewriterInterval = setInterval(() => {
+        if (!isDeleting) {
+          // 打字阶段
+          if (currentIndex < fullText.length) {
+            typewriterText.value = fullText.slice(0, currentIndex + 1)
+            currentIndex++
+          } else {
+            // 等待一段时间后开始删除
+            setTimeout(() => {
+              isDeleting = true
+            }, 2000)
+          }
+        } else {
+          // 删除阶段
+          if (currentIndex > 0) {
+            typewriterText.value = fullText.slice(0, currentIndex - 1)
+            currentIndex--
+          } else {
+            // 删除完成后重新开始
+            isDeleting = false
+            setTimeout(() => {
+              currentIndex = 0
+            }, 1000)
+          }
+        }
+      }, 150) // 打字速度
+    }
+
     onMounted(() => {
+      // 启动打字机效果
+      startTypewriter()
+
       echarts.registerMap('china', chinaGeoJson)
       const myChart = echarts.init(chinaMap.value)
       myChart.setOption({
@@ -72,11 +109,19 @@ export default defineComponent({
       })
       window.addEventListener('resize', () => myChart.resize())
     })
+
+    onUnmounted(() => {
+      if (typewriterInterval) {
+        clearInterval(typewriterInterval)
+      }
+    })
+
     return {
       aboutImages,
       footprints,
       chinaMap,
       isChatOpen,
+      typewriterText,
       handleToggleChat,
       handleCloseChat,
     }
@@ -90,7 +135,9 @@ export default defineComponent({
       <section class="banner">
         <div class="banner-content">
           <h1 class="animate__animated animate__fadeInDown">蒲公英乡野航迹实践队</h1>
-          <p class="animate__animated animate__fadeInUp animate__delay-1s">心随风扬 奔赴希望</p>
+          <p class="animate__animated animate__fadeInUp animate__delay-1s typewriter-text">
+            {{ typewriterText }}<span class="cursor">|</span>
+          </p>
         </div>
       </section>
     </div>
@@ -181,6 +228,28 @@ export default defineComponent({
   max-width: 800px;
   margin: 0 auto;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.typewriter-text {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 2px;
+}
+
+.cursor {
+  animation: blink 1s infinite;
+  color: #ffcc00;
+  font-weight: bold;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
 }
 
 /* 保持原有about样式不变 */
