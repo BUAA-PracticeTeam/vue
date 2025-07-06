@@ -51,7 +51,7 @@ export default defineComponent({
 .carousel-box {
   width: 100%;
   height: 200px;
-  border: 2px solid #333;
+  border: 1px solid #333;
   overflow: hidden;
   background: #333;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
