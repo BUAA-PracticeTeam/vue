@@ -103,8 +103,11 @@
         </div>
       </template>
 
-      <!-- 输入中状态 -->
-      <div class="chat-window__message chat-window__message--bot" v-if="isTyping">
+      <!-- 输入中状态 - 只在没有实际AI消息时显示 -->
+      <div
+        class="chat-window__message chat-window__message--bot"
+        v-if="isTyping && !hasActiveBotMessage"
+      >
         <div class="chat-window__message-avatar">
           <div class="chat-window__message-avatar-icon">🤖</div>
         </div>
@@ -180,6 +183,15 @@ const userAvatar = computed(() => userStore.user.avatar || defaultAvatar)
 const messages = computed(() => [chatStore.getWelcomeMessage()])
 const conversationHistory = computed(() => chatStore.getConversationHistory())
 
+// 检查是否有活跃的AI消息（用于隐藏正在输入状态）
+const hasActiveBotMessage = computed(() => {
+  if (conversationHistory.value.length === 0) return false
+  const lastConversation = conversationHistory.value[conversationHistory.value.length - 1]
+  return (
+    lastConversation && lastConversation.botMessage && lastConversation.botMessage.content !== ''
+  )
+})
+
 // 格式化时间
 const formatTime = (timestamp) => {
   const now = new Date()
@@ -220,8 +232,9 @@ const sendMessage = async () => {
 
   // 调用流式AI回复
   try {
-    // 先添加一个空的AI消息
+    // 先添加一个空的AI消息，并隐藏正在输入状态
     chatStore.addBotMessage('')
+    isTyping.value = false // 隐藏正在输入状态，因为现在有实际的AI消息了
 
     await chatStore.getAIResponseStream(
       messageContent,
