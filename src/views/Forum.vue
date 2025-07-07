@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { defineOptions } from 'vue'
 
 // 设置组件名称
 defineOptions({

@@ -12,7 +12,6 @@
 // 组件会自动注册模板中使用的组件
 import NavBar from '@/components/NavBar.vue'
 import FooterBar from '@/components/FooterBar.vue'
-import { defineOptions } from 'vue'
 
 // 设置组件名称 (Vue 3.3+)
 defineOptions({
