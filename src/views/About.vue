@@ -300,6 +300,8 @@ export default defineComponent({
 .about-content {
   margin: 0 auto;
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   gap: 2rem;
 }
@@ -328,17 +330,6 @@ export default defineComponent({
   transform: scale(1.05);
 }
 
-@media (max-width: 768px) {
-  .about-content {
-    flex-direction: column;
-  }
-
-  .about-image {
-    order: -1;
-    margin-bottom: 1.5rem;
-  }
-}
-
 .about-footprint-content {
   display: flex;
   align-items: stretch;
@@ -347,7 +338,8 @@ export default defineComponent({
 }
 
 .china-map {
-  width: 420px;
+  width: 100%;
+  max-width: 420px;
   height: 400px;
   border-radius: 8px;
   overflow: hidden;
@@ -374,5 +366,33 @@ export default defineComponent({
   box-shadow: 0 1px 4px rgba(41, 137, 216, 0.06);
   font-weight: 500;
   line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    width: 85%;
+  }
+
+  .about-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .about-image {
+    width: 100%;
+    height: auto;
+    order: -1;
+  }
+
+  .about-footprint-content {
+    flex-direction: column;
+  }
+
+  .china-map {
+    width: 100%;
+    max-width: none;
+    height: 400px;
+  }
 }
 </style>

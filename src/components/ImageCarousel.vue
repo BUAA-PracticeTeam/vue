@@ -143,6 +143,9 @@ export default defineComponent({
 }
 
 @media (max-width: 600px) {
+  .image-carousel-container {
+    padding: 0;
+  }
   .carousel-box {
     width: 100%;
     height: 120px;
