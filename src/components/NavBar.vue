@@ -60,7 +60,7 @@ watch(
   () => windowWidth.value,
   (newWidth) => {
     // 当窗口宽度变化时，自动关闭菜单
-    console.log('Window width changed:', newWidth)
+    // console.log('Window width changed:', newWidth)
     if (newWidth > 960) {
       mobileMenuOpen.value = false
     }
