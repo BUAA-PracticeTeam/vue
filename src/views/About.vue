@@ -56,8 +56,8 @@ export default defineComponent({
 
       const indicators = Array.from(testimonialSection.value.querySelectorAll('.indicator'))
 
-      if (cards.length < 4 || indicators.length < 4) {
-        console.warn('需要至少4张卡片和4个指示器')
+      if (cards.length < 6 || indicators.length < 6) {
+        console.warn('需要至少6张卡片和6个指示器')
         return
       }
 
@@ -82,7 +82,7 @@ export default defineComponent({
         let currentIndex = 0
         let minDistance = Number.MAX_VALUE
 
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 6; i++) {
           const cardPosition = getCardPosition(i)
           const distance = Math.abs(scrollLeft - cardPosition)
 
@@ -111,7 +111,7 @@ export default defineComponent({
       scrollContainer.addEventListener('scroll', handleScroll)
 
       indicators.forEach((indicator, index) => {
-        if (index < 4) {
+        if (index < 6) {
           indicator.style.cursor = 'pointer'
           indicator.addEventListener('click', () => handleIndicatorClick(index))
         }
@@ -203,7 +203,7 @@ export default defineComponent({
         }
 
         indicators.forEach((indicator, index) => {
-          if (index < 4) {
+          if (index < 6) {
             indicator.removeEventListener('click', () => handleIndicatorClick(index))
           }
         })
@@ -287,49 +287,71 @@ export default defineComponent({
       <div class="testimonials-section" ref="testimonialSection">
         <div class="testimonials-grid">
           <div class="testimonial-card">
-            <img src="@/assets/img/alibaba.png" alt="Alibaba" class="company-logo-img" />
+            <img src="@/assets/img/logo/remin.png" alt="人民日报" class="company-logo-img" />
             <p class="testimonial-text">
-              蒲公英实践队的支教活动非常有意义，给孩子们带来了希望和梦想。看到孩子们的笑容，真的很感动！
+              蒲公英实践队的支教活动展现了新时代青年的责任担当，他们用实际行动诠释了"奉献、友爱、互助、进步"的志愿精神。
             </p>
             <div class="user-info">
-              <span class="user-name">清华大学 张同学</span>
-              <span class="user-title">计算机科学与技术</span>
+              <span class="user-name">人民日报</span>
+              <span class="user-title">官方媒体</span>
             </div>
           </div>
           <div class="testimonial-card">
-            <img src="@/assets/img/bytedance.png" alt="ByteDance" class="company-logo-img" />
+            <img src="@/assets/img/logo/toutiao.png" alt="今日头条" class="company-logo-img" />
             <p class="testimonial-text">
-              很欣赏蒲公英实践队的创新精神，他们用技术改变乡村教育的方式很有前瞻性，希望未来能有机会合作。
+              看到蒲公英实践队在乡村的支教故事，深受感动。他们不仅传授知识，更传递了希望和梦想，是新时代青年的榜样。
             </p>
             <div class="user-info">
-              <span class="user-name">北京邮电大学 李同学</span>
-              <span class="user-title">软件工程</span>
+              <span class="user-name">今日头条</span>
+              <span class="user-title">资讯平台</span>
             </div>
           </div>
           <div class="testimonial-card">
-            <img src="@/assets/img/xiaohongshu.png" alt="小红书" class="company-logo-img" />
+            <img src="@/assets/img/logo/bilibili.png" alt="B站" class="company-logo-img" />
             <p class="testimonial-text">
-              在小红书上看到蒲公英实践队的分享，他们的环保宣传活动很有创意，用新媒体传播环保理念真的很棒！
+              在B站看到蒲公英实践队的支教视频，他们的环保宣传活动很有创意，用新媒体传播正能量，值得点赞！
             </p>
             <div class="user-info">
-              <span class="user-name">北京外国语大学 王同学</span>
-              <span class="user-title">新闻传播学</span>
+              <span class="user-name">B站</span>
+              <span class="user-title">视频平台</span>
             </div>
           </div>
           <div class="testimonial-card">
-            <img src="@/assets/img/tencent.png" alt="Tencent" class="company-logo-img" />
+            <img src="@/assets/img/logo/douyin.png" alt="抖音" class="company-logo-img" />
             <p class="testimonial-text">
-              腾讯一直关注教育公益，蒲公英实践队的乡村支教项目很有价值，培养了孩子们的创新思维。
+              抖音上蒲公英实践队的支教记录很真实感人，他们用镜头记录下乡村孩子们的笑容，传递了温暖和希望。
             </p>
             <div class="user-info">
-              <span class="user-name">中国科学院大学 陈同学</span>
-              <span class="user-title">人工智能</span>
+              <span class="user-name">抖音</span>
+              <span class="user-title">短视频平台</span>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <img src="@/assets/img/logo/kuaishou.png" alt="快手" class="company-logo-img" />
+            <p class="testimonial-text">
+              快手上看到蒲公英实践队的乡村调研，他们深入基层了解民情，用数据说话，展现了当代大学生的社会责任感。
+            </p>
+            <div class="user-info">
+              <span class="user-name">快手</span>
+              <span class="user-title">短视频平台</span>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <img src="@/assets/img/logo/xiaohongshu.png" alt="小红书" class="company-logo-img" />
+            <p class="testimonial-text">
+              小红书上蒲公英实践队的分享很用心，他们的环保宣传活动很有创意，用新媒体传播环保理念，让更多人关注公益。
+            </p>
+            <div class="user-info">
+              <span class="user-name">小红书</span>
+              <span class="user-title">生活方式平台</span>
             </div>
           </div>
         </div>
         <!-- 滚动指示点 -->
         <div class="scroll-indicators">
           <span class="indicator active"></span>
+          <span class="indicator"></span>
+          <span class="indicator"></span>
           <span class="indicator"></span>
           <span class="indicator"></span>
           <span class="indicator"></span>
@@ -564,7 +586,66 @@ export default defineComponent({
 
 .testimonial-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* 人民日报 - 红色边框 */
+.testimonial-card:nth-child(1) {
+  border: 2px solid #cb1720;
+}
+
+.testimonial-card:nth-child(1):hover {
+  border-color: #a01219;
+  box-shadow: 0 4px 20px rgba(203, 23, 32, 0.15);
+}
+
+/* 今日头条 - 橙红色边框 */
+.testimonial-card:nth-child(2) {
+  border: 2px solid #e8260d;
+}
+
+.testimonial-card:nth-child(2):hover {
+  border-color: #c01f0b;
+  box-shadow: 0 4px 20px rgba(232, 38, 13, 0.15);
+}
+
+/* B站 - 粉色边框 */
+.testimonial-card:nth-child(3) {
+  border: 2px solid #d4237a;
+}
+
+.testimonial-card:nth-child(3):hover {
+  border-color: #b01c62;
+  box-shadow: 0 4px 20px rgba(212, 35, 122, 0.15);
+}
+
+/* 抖音 - 黑色边框 */
+.testimonial-card:nth-child(4) {
+  border: 2px solid #111111;
+}
+
+.testimonial-card:nth-child(4):hover {
+  border-color: #000000;
+  box-shadow: 0 4px 20px rgba(17, 17, 17, 0.15);
+}
+
+/* 快手 - 橙色边框 */
+.testimonial-card:nth-child(5) {
+  border: 2px solid #ff4a08;
+}
+
+.testimonial-card:nth-child(5):hover {
+  border-color: #e03d07;
+  box-shadow: 0 4px 20px rgba(255, 74, 8, 0.15);
+}
+
+/* 小红书 - 红色边框 */
+.testimonial-card:nth-child(6) {
+  border: 2px solid #fe0000;
+}
+
+.testimonial-card:nth-child(6):hover {
+  border-color: #cc0000;
+  box-shadow: 0 4px 20px rgba(254, 0, 0, 0.15);
 }
 
 .company-logo-img {
@@ -575,10 +656,52 @@ export default defineComponent({
   border-radius: 6px;
 }
 
-/* 小红书logo保持较小尺寸 */
-.testimonial-card:nth-child(3) .company-logo-img {
-  width: 32px;
-  height: 32px;
+/* 人民日报logo更大 */
+.testimonial-card:nth-child(1) .company-logo-img {
+  width: 56px;
+  height: 56px;
+}
+
+/* 分割线样式 */
+.testimonial-card::after {
+  content: '';
+  position: absolute;
+  top: 80px;
+  left: 1.5rem;
+  right: 1.5rem;
+  height: 1px;
+  background-color: #e0e0e0;
+}
+
+/* 人民日报 - 红色分割线 */
+.testimonial-card:nth-child(1)::after {
+  background-color: #e8a5a8;
+  top: 80px;
+}
+
+/* 今日头条 - 橙红色分割线 */
+.testimonial-card:nth-child(2)::after {
+  background-color: #f4b3a8;
+}
+
+/* B站 - 粉色分割线 */
+.testimonial-card:nth-child(3)::after {
+  background-color: #f0b8d1;
+}
+
+/* 抖音 - 黑色分割线 */
+.testimonial-card:nth-child(4)::after {
+  background-color: #cccccc;
+}
+
+/* 快手 - 橙色分割线 */
+.testimonial-card:nth-child(5)::after {
+  background-color: #ffc4a3;
+}
+
+/* 小红书 - 红色分割线 */
+.testimonial-card:nth-child(6)::after {
+  background-color: #ffb3b3;
 }
 
 .testimonial-text {
@@ -586,6 +709,7 @@ export default defineComponent({
   font-size: 0.9rem;
   line-height: 1.5;
   margin-bottom: 1rem;
+  margin-top: 1.2rem;
   font-weight: 400;
   flex: 1;
 }
@@ -652,14 +776,26 @@ export default defineComponent({
     height: 42px;
   }
 
-  /* 小红书logo在移动端保持较小尺寸 */
-  .testimonial-card:nth-child(3) .company-logo-img {
-    width: 28px;
-    height: 28px;
+  /* 人民日报logo在移动端也更大 */
+  .testimonial-card:nth-child(1) .company-logo-img {
+    width: 48px;
+    height: 48px;
+  }
+
+  /* 移动端分割线位置调整 */
+  .testimonial-card::after {
+    top: 70px;
+    left: 1.3rem;
+    right: 1.3rem;
+  }
+
+  .testimonial-card:nth-child(1)::after {
+    top: 70px;
   }
 
   .testimonial-text {
     font-size: 0.85rem;
+    margin-top: 1rem;
   }
 
   .user-name {
