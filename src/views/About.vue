@@ -136,7 +136,7 @@ export default defineComponent({
     <div>
       <section class="banner">
         <div class="banner-content">
-          <h1 class="animate__animated animate__fadeInDown">蒲公英乡野航迹实践队</h1>
+          <h1 class="animate__animated animate__fadeInDown">蒲公英-乡野航迹实践队</h1>
           <p class="animate__animated animate__fadeInUp animate__delay-1s typewriter-text">
             {{ typewriterText }}<span class="cursor">|</span>
           </p>
@@ -154,7 +154,7 @@ export default defineComponent({
       <div class="about-content">
         <div class="about-text">
           <p>
-            蒲公英乡野航迹实践队成立于2023年，是一支由北京航空航天大学计算机学院自发组织的志愿服务团队。我们致力于社会调研、乡村支教、环境保护等公益实践活动，旨在通过实际行动服务社会、锻炼自我。
+            蒲公英-乡野航迹实践队成立于2023年，是一支由北京航空航天大学计算机学院自发组织的志愿服务团队。我们致力于社会调研、乡村支教、环境保护等公益实践活动，旨在通过实际行动服务社会、锻炼自我。
           </p>
           <p>
             经过三年的发展，团队已从最初的10人发展到现在的50余人，累计开展各类实践活动100余次，服务时长超过5000小时，足迹遍布全国多个省市自治区。

@@ -7,7 +7,7 @@
           <div class="chat-window__avatar-icon">🤖</div>
         </div>
         <div class="chat-window__header-text">
-          <h3 class="chat-window__title">蒲公英乡野航迹实践队 AI 助手</h3>
+          <h3 class="chat-window__title">蒲公英-乡野航迹实践队 AI 助手</h3>
           <p class="chat-window__status">在线 · 随时为您服务</p>
         </div>
       </div>
@@ -320,7 +320,7 @@ const scrollToBottom = () => {
 // 备用AI回复逻辑（已废弃，现在使用真实的AI API）
 // const getBotResponse = () => {
 //   const responses = [
-//     '蒲公英乡野航迹实践队成立于2023年，是一支由北京航空航天大学计算机学院自发组织的志愿服务团队。我们致力于社会调研、乡村支教、环境保护等公益实践活动，旨在通过实际行动服务社会、锻炼自我。',
+//     '蒲公英-乡野航迹实践队成立于2023年，是一支由北京航空航天大学计算机学院自发组织的志愿服务团队。我们致力于社会调研、乡村支教、环境保护等公益实践活动，旨在通过实际行动服务社会、锻炼自我。',
 //   ]
 //   return responses[Math.floor(Math.random() * responses.length)]
 // }
