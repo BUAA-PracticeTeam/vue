@@ -135,7 +135,7 @@ const handleSignIn = async () => {
   })
 
   if (result.success) {
-    router.push('/about')
+    router.push('/')
   }
 }
 
