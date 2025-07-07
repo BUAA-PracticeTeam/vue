@@ -29,9 +29,13 @@ export default defineComponent({
     const isChatOpen = ref(false)
     const typewriterText = ref('')
     const fullText = '心随风扬 奔赴希望'
+    const testimonialSection = ref(null)
+    const activeIndicator = ref(0)
     let typewriterInterval = null
     let isDeleting = false
     let currentIndex = 0
+    let handleScroll = null
+    let handleIndicatorClick = null
 
     const handleToggleChat = (open) => {
       isChatOpen.value = open
@@ -41,37 +45,107 @@ export default defineComponent({
       isChatOpen.value = false
     }
 
+    const updateScrollIndicators = () => {
+      if (!testimonialSection.value) return
+
+      const scrollContainer = testimonialSection.value.querySelector('.testimonials-grid')
+      if (!scrollContainer) return
+
+      const cards = Array.from(scrollContainer.querySelectorAll('.testimonial-card'))
+      if (cards.length === 0) return
+
+      const indicators = Array.from(testimonialSection.value.querySelectorAll('.indicator'))
+
+      if (cards.length < 4 || indicators.length < 4) {
+        console.warn('需要至少4张卡片和4个指示器')
+        return
+      }
+
+      const updateActiveIndicator = (index) => {
+        activeIndicator.value = index
+        indicators.forEach((indicator, i) => {
+          indicator.classList.toggle('active', i === index)
+        })
+      }
+
+      const getCardPosition = (index) => {
+        // 计算每张卡片的精确位置
+        const cardWidth = 240 // 卡片宽度
+        const cardMargin = 19 // 卡片间距 (1.2rem = 19.2px)
+
+        return index * (cardWidth + cardMargin)
+      }
+
+      handleScroll = () => {
+        const scrollLeft = scrollContainer.scrollLeft
+
+        let currentIndex = 0
+        let minDistance = Number.MAX_VALUE
+
+        for (let i = 0; i < 4; i++) {
+          const cardPosition = getCardPosition(i)
+          const distance = Math.abs(scrollLeft - cardPosition)
+
+          if (distance < minDistance) {
+            minDistance = distance
+            currentIndex = i
+          }
+        }
+
+        if (currentIndex !== activeIndicator.value) {
+          updateActiveIndicator(currentIndex)
+        }
+      }
+
+      handleIndicatorClick = (index) => {
+        const scrollPosition = getCardPosition(index)
+
+        scrollContainer.scrollTo({
+          left: scrollPosition,
+          behavior: 'smooth',
+        })
+
+        updateActiveIndicator(index)
+      }
+
+      scrollContainer.addEventListener('scroll', handleScroll)
+
+      indicators.forEach((indicator, index) => {
+        if (index < 4) {
+          indicator.style.cursor = 'pointer'
+          indicator.addEventListener('click', () => handleIndicatorClick(index))
+        }
+      })
+
+      updateActiveIndicator(0)
+    }
+
     const startTypewriter = () => {
       typewriterInterval = setInterval(() => {
         if (!isDeleting) {
-          // 打字阶段
           if (currentIndex < fullText.length) {
             typewriterText.value = fullText.slice(0, currentIndex + 1)
             currentIndex++
           } else {
-            // 等待一段时间后开始删除
             setTimeout(() => {
               isDeleting = true
             }, 2000)
           }
         } else {
-          // 删除阶段
           if (currentIndex > 0) {
             typewriterText.value = fullText.slice(0, currentIndex - 1)
             currentIndex--
           } else {
-            // 删除完成后重新开始
             isDeleting = false
             setTimeout(() => {
               currentIndex = 0
             }, 1000)
           }
         }
-      }, 150) // 打字速度
+      }, 150)
     }
 
     onMounted(() => {
-      // 启动打字机效果
       startTypewriter()
 
       echarts.registerMap('china', chinaGeoJson)
@@ -110,11 +184,29 @@ export default defineComponent({
         ],
       })
       window.addEventListener('resize', () => myChart.resize())
+
+      updateScrollIndicators()
     })
 
     onUnmounted(() => {
       if (typewriterInterval) {
         clearInterval(typewriterInterval)
+      }
+
+      // 清理用户评价滚动事件监听器
+      if (testimonialSection.value && handleScroll && handleIndicatorClick) {
+        const scrollContainer = testimonialSection.value.querySelector('.testimonials-grid')
+        const indicators = Array.from(testimonialSection.value.querySelectorAll('.indicator'))
+
+        if (scrollContainer) {
+          scrollContainer.removeEventListener('scroll', handleScroll)
+        }
+
+        indicators.forEach((indicator, index) => {
+          if (index < 4) {
+            indicator.removeEventListener('click', () => handleIndicatorClick(index))
+          }
+        })
       }
     })
 
@@ -126,6 +218,8 @@ export default defineComponent({
       typewriterText,
       handleToggleChat,
       handleCloseChat,
+      testimonialSection,
+      activeIndicator,
     }
   },
 })
@@ -181,6 +275,64 @@ export default defineComponent({
         <div ref="chinaMap" class="china-map"></div>
         <div class="footprint-list">
           <div class="footprint-item" v-for="item in footprints" :key="item">{{ item }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 用户评价 -->
+    <div class="container">
+      <div class="section-title">
+        <h2>看看大家怎么说？</h2>
+      </div>
+      <div class="testimonials-section" ref="testimonialSection">
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <img src="@/assets/img/alibaba.png" alt="Alibaba" class="company-logo-img" />
+            <p class="testimonial-text">
+              蒲公英实践队的支教活动非常有意义，给孩子们带来了希望和梦想。看到孩子们的笑容，真的很感动！
+            </p>
+            <div class="user-info">
+              <span class="user-name">清华大学 张同学</span>
+              <span class="user-title">计算机科学与技术</span>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <img src="@/assets/img/bytedance.png" alt="ByteDance" class="company-logo-img" />
+            <p class="testimonial-text">
+              很欣赏蒲公英实践队的创新精神，他们用技术改变乡村教育的方式很有前瞻性，希望未来能有机会合作。
+            </p>
+            <div class="user-info">
+              <span class="user-name">北京邮电大学 李同学</span>
+              <span class="user-title">软件工程</span>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <img src="@/assets/img/xiaohongshu.png" alt="小红书" class="company-logo-img" />
+            <p class="testimonial-text">
+              在小红书上看到蒲公英实践队的分享，他们的环保宣传活动很有创意，用新媒体传播环保理念真的很棒！
+            </p>
+            <div class="user-info">
+              <span class="user-name">北京外国语大学 王同学</span>
+              <span class="user-title">新闻传播学</span>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <img src="@/assets/img/tencent.png" alt="Tencent" class="company-logo-img" />
+            <p class="testimonial-text">
+              腾讯一直关注教育公益，蒲公英实践队的乡村支教项目很有价值，培养了孩子们的创新思维。
+            </p>
+            <div class="user-info">
+              <span class="user-name">中国科学院大学 陈同学</span>
+              <span class="user-title">人工智能</span>
+            </div>
+          </div>
+        </div>
+        <!-- 滚动指示点 -->
+        <div class="scroll-indicators">
+          <span class="indicator active"></span>
+          <span class="indicator"></span>
+          <span class="indicator"></span>
+          <span class="indicator"></span>
         </div>
       </div>
     </div>
@@ -374,5 +526,148 @@ export default defineComponent({
   box-shadow: 0 1px 4px rgba(41, 137, 216, 0.06);
   font-weight: 500;
   line-height: 1.6;
+}
+
+/* 用户评价样式 */
+.testimonials-section {
+  margin-top: 2rem;
+}
+
+.testimonials-grid {
+  display: flex;
+  gap: 1.2rem;
+  overflow-x: auto;
+  padding: 1rem 0;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.testimonials-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.testimonial-card {
+  min-width: 240px;
+  max-width: 240px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f0f0f0;
+  transition: all 0.3s ease;
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.company-logo-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  margin-bottom: 0.8rem;
+  border-radius: 6px;
+}
+
+/* 小红书logo保持较小尺寸 */
+.testimonial-card:nth-child(3) .company-logo-img {
+  width: 32px;
+  height: 32px;
+}
+
+.testimonial-text {
+  color: #333;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  font-weight: 400;
+  flex: 1;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-top: auto;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #2989d8;
+  font-size: 0.85rem;
+}
+
+.user-title {
+  color: #666;
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.scroll-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ddd;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator.active {
+  background-color: #2989d8;
+  transform: scale(1.2);
+}
+
+.indicator:hover {
+  background-color: #2989d8;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .testimonials-grid {
+    gap: 1rem;
+    padding: 0.5rem 0;
+  }
+
+  .testimonial-card {
+    min-width: 220px;
+    max-width: 220px;
+    padding: 1.3rem;
+  }
+
+  .company-logo-img {
+    width: 42px;
+    height: 42px;
+  }
+
+  /* 小红书logo在移动端保持较小尺寸 */
+  .testimonial-card:nth-child(3) .company-logo-img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .testimonial-text {
+    font-size: 0.85rem;
+  }
+
+  .user-name {
+    font-size: 0.8rem;
+  }
+
+  .user-title {
+    font-size: 0.7rem;
+  }
 }
 </style>
