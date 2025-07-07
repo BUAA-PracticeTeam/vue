@@ -52,9 +52,10 @@ const handleLogoutClick = () => {
   if (userStore.user && userStore.user.username) {
     message.success('退出登录')
     userStore.clearUser() // 清除用户信息
-    router.push('/about') // 跳转到登录页
+    router.push('/') // 跳转到首页
   } else {
     message.warning('当前未登录')
+    router.push('/login') // 跳转到登录页
   }
 }
 
@@ -96,7 +97,8 @@ onMounted(() => {
               <a-menu-divider />
               <a-menu-item key="logout" @click="handleLogoutClick">
                 <LogoutOutlined />
-                <span>退出登录</span>
+                <span v-if="userStore.user && userStore.user.username">退出登录</span>
+                <span v-else>登录/注册</span>
               </a-menu-item>
             </a-menu>
           </div>
