@@ -6,6 +6,7 @@ import Forum from '../views/Forum.vue'
 import PersonalCenter from '../views/PersonalCenter.vue'
 import AuthPage from '../views/AuthPage.vue'
 import ArticleDetail from '@/views/article/ArticleDetail.vue'
+import Documentation from '@/views/Documentation.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -86,6 +87,12 @@ const router = createRouter({
       name: 'ArticleDetail',
       component: ArticleDetail,
       meta: { title: '文章详情 - BUAA Practice Team' },
+    },
+    {
+      path: '/docs',
+      name: 'DocumentationPage',
+      component: Documentation,
+      meta: { title: '功能文档 - BUAA Practice Team' },
     },
   ],
 })

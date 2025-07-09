@@ -28,13 +28,13 @@ export default defineComponent({
               <router-link to="/">首页</router-link>
             </li>
             <li>
-              <router-link to="/about">关于我们</router-link>
+              <router-link to="/team">队员介绍</router-link>
             </li>
             <li>
               <router-link to="/gallery">精彩回顾</router-link>
             </li>
             <li>
-              <router-link to="/forum">交流论坛</router-link>
+              <router-link to="/docs">功能文档</router-link>
             </li>
           </ul>
         </div>
