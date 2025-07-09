@@ -73,7 +73,7 @@ watch(
   <header>
     <div class="container header-container">
       <router-link to="/" class="logo">
-        <img src="/logo.png" alt="Logo" class="logo-img"/>
+        <img src="/logo.png" alt="Logo" class="logo-img" />
         <span>蒲公英-乡野航迹实践队</span>
       </router-link>
       <nav>
@@ -88,9 +88,9 @@ watch(
           <li>
             <router-link to="/gallery">精彩回顾</router-link>
           </li>
-          <li>
+          <!-- <li>
             <router-link to="/forum">交流论坛</router-link>
-          </li>
+          </li> -->
         </ul>
 
         <!-- 窄屏菜单按钮 -->
@@ -115,9 +115,9 @@ watch(
             <li>
               <router-link to="/gallery" @click="toggleMobileMenu">精彩回顾</router-link>
             </li>
-            <li>
+            <!-- <li>
               <router-link to="/forum" @click="toggleMobileMenu">交流论坛</router-link>
-            </li>
+            </li> -->
             <li>
               <router-link to="/ps" @click="handleProfileClick">个人中心</router-link>
             </li>
