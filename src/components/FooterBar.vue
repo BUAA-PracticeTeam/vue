@@ -36,6 +36,9 @@ export default defineComponent({
             <li>
               <router-link to="/docs">功能文档</router-link>
             </li>
+            <li>
+              <router-link to="/charity">爱心基金</router-link>
+            </li>
           </ul>
         </div>
 

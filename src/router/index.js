@@ -1,12 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import About from '../views/About.vue'
-import Team from '../views/Team.vue'
-import Gallery from '../views/Gallery.vue'
-import Forum from '../views/Forum.vue'
-import PersonalCenter from '../views/PersonalCenter.vue'
-import AuthPage from '../views/AuthPage.vue'
-import ArticleDetail from '@/views/article/ArticleDetail.vue'
-import Documentation from '@/views/Documentation.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,13 +13,13 @@ const router = createRouter({
     {
       path: '/login',
       name: 'LoginPage',
-      component: AuthPage,
+      component: () => import('../views/AuthPage.vue'),
       meta: { title: '登录 - BUAA Practice Team' },
     },
     {
       path: '/auth',
       name: 'AuthPage',
-      component: AuthPage,
+      component: () => import('../views/AuthPage.vue'),
       meta: { title: '认证 - BUAA Practice Team' },
     },
     {
@@ -38,25 +31,25 @@ const router = createRouter({
     {
       path: '/team',
       name: 'TeamPage',
-      component: Team,
+      component: () => import('../views/Team.vue'),
       meta: { title: '团队 - BUAA Practice Team' },
     },
     {
       path: '/gallery',
       name: 'GalleryPage',
-      component: Gallery,
+      component: () => import('../views/Gallery.vue'),
       meta: { title: '画廊 - BUAA Practice Team' },
     },
     {
       path: '/forum',
       name: 'ForumPage',
-      component: Forum,
+      component: () => import('../views/Forum.vue'),
       meta: { title: '论坛 - BUAA Practice Team' },
     },
     {
       path: '/ps',
       name: 'PersonalCenter',
-      component: PersonalCenter,
+      component: () => import('../views/PersonalCenter.vue'),
       redirect: '/user/avatar',
       meta: { title: '个人中心 - BUAA Practice Team' },
       children: [
@@ -85,14 +78,20 @@ const router = createRouter({
     {
       path: '/article/:id',
       name: 'ArticleDetail',
-      component: ArticleDetail,
+      component: () => import('@/views/article/ArticleDetail.vue'),
       meta: { title: '文章详情 - BUAA Practice Team' },
     },
     {
       path: '/docs',
       name: 'DocumentationPage',
-      component: Documentation,
+      component: () => import('@/views/Documentation.vue'),
       meta: { title: '功能文档 - BUAA Practice Team' },
+    },
+    {
+      path: '/charity',
+      name: 'CharityFundPage',
+      component: () => import('@/views/CharityFund.vue'),
+      meta: { title: '爱心基金 - BUAA Practice Team' },
     },
   ],
 })
