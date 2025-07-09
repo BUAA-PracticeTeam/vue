@@ -372,7 +372,7 @@ onMounted(() => {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
-  z-index: 999;
+  z-index: 9999;
   transform: translateY(20px) scale(0.9);
   opacity: 0;
   visibility: hidden;
@@ -669,13 +669,57 @@ onMounted(() => {
   .chat-window {
     width: calc(100vw - 40px);
     height: calc(100vh - 200px);
-    bottom: 100px;
+    top: 80px;
+    bottom: auto;
     right: 20px;
     left: 20px;
+    z-index: 9999;
   }
 
   .chat-window__message-content {
     max-width: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-window {
+    width: calc(100vw - 20px);
+    height: calc(100vh - 180px);
+    top: 70px;
+    bottom: auto;
+    right: 10px;
+    left: 10px;
+    z-index: 9999;
+  }
+
+  .chat-window__header {
+    padding: 12px 16px;
+  }
+
+  .chat-window__title {
+    font-size: 14px;
+  }
+
+  .chat-window__status {
+    font-size: 11px;
+  }
+
+  .chat-window__messages {
+    padding: 12px;
+  }
+
+  .chat-window__input-area {
+    padding: 12px;
+  }
+
+  .chat-window__input {
+    font-size: 13px;
+    padding: 10px 14px;
+  }
+
+  .chat-window__send-btn {
+    width: 40px;
+    height: 40px;
   }
 }
 

@@ -434,7 +434,7 @@ export default defineComponent({
 
 /* 保持原有about样式不变 */
 .about-page {
-  padding-top: 100px;
+  padding-top: 120px;
 }
 
 .section-title {
@@ -752,6 +752,33 @@ export default defineComponent({
 
 /* 响应式设计 */
 @media (max-width: 768px) {
+  .about-page {
+    padding-top: 140px;
+  }
+
+  .banner {
+    height: 300px;
+    margin-bottom: 2rem;
+  }
+
+  .banner h1 {
+    font-size: 2rem;
+  }
+
+  .banner p {
+    font-size: 1rem;
+  }
+
+  .container {
+    width: 90%;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-title h2 {
+    font-size: 1.5rem;
+  }
+
   .testimonials-grid {
     gap: 1rem;
     padding: 0.5rem 0;
@@ -796,6 +823,91 @@ export default defineComponent({
 
   .user-title {
     font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-page {
+    padding-top: 130px;
+  }
+
+  .banner {
+    height: 250px;
+    margin-bottom: 1.5rem;
+  }
+
+  .banner h1 {
+    font-size: 1.5rem;
+  }
+
+  .banner p {
+    font-size: 0.9rem;
+  }
+
+  .container {
+    width: 95%;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title h2 {
+    font-size: 1.3rem;
+  }
+
+  .about-content {
+    gap: 1rem;
+  }
+
+  .about-image {
+    height: 250px;
+  }
+
+  .china-map {
+    height: 300px;
+  }
+
+  .footprint-item {
+    font-size: 1rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .testimonial-card {
+    min-width: 200px;
+    max-width: 200px;
+    padding: 1rem;
+  }
+
+  .company-logo-img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .testimonial-card:nth-child(1) .company-logo-img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .testimonial-card::after {
+    top: 60px;
+    left: 1rem;
+    right: 1rem;
+  }
+
+  .testimonial-card:nth-child(1)::after {
+    top: 60px;
+  }
+
+  .testimonial-text {
+    font-size: 0.8rem;
+    margin-top: 0.8rem;
+  }
+
+  .user-name {
+    font-size: 0.75rem;
+  }
+
+  .user-title {
+    font-size: 0.65rem;
   }
 }
 @media (max-width: 1024px) {
