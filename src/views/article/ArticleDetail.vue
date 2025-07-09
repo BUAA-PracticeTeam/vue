@@ -443,4 +443,419 @@ const goBack = () => {
   color: #666;
   text-align: center;
 }
+
+/* 响应式布局和移动端优化 */
+@media (max-width: 1200px) {
+  .detail-layout {
+    max-width: 1000px;
+    gap: 24px;
+  }
+
+  .content-card {
+    padding: 2rem 2.5rem;
+    max-width: 700px;
+  }
+
+  .sidebar-title {
+    font-size: 1.6rem;
+  }
+
+  .main-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .detail-layout {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .sidebar {
+    position: static;
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .sidebar-card {
+    margin-bottom: 0;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .content-card {
+    min-width: auto;
+    max-width: none;
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .article-detail-page {
+    padding: 140px 2px 20px;
+  }
+
+  .detail-layout {
+    gap: 12px;
+    padding-left: 1px;
+    padding-right: 1px;
+    align-items: center;
+  }
+
+  .sidebar {
+    max-width: 500px;
+  }
+
+  .main-content {
+    max-width: 500px;
+  }
+
+  .sidebar-card {
+    border-radius: 8px;
+  }
+
+  .cover-image {
+    height: 160px;
+  }
+
+  .info-content {
+    padding: 1rem 1.2rem 1.2rem;
+  }
+
+  .sidebar-title {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .author-bar {
+    padding-bottom: 1rem;
+  }
+
+  .author-avatar {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+  }
+
+  .author-nickname {
+    font-size: 0.95rem;
+  }
+
+  .pub-date {
+    font-size: 0.8rem;
+  }
+
+  .stats-bar {
+    gap: 1.2rem;
+    margin-top: 1rem;
+  }
+
+  .stat-item {
+    font-size: 0.9rem;
+  }
+
+  .content-card {
+    padding: 1.5rem 1rem;
+    border-radius: 8px;
+  }
+
+  .main-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 1.2rem;
+  }
+
+  .main-content-body {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  /* 移动端段落优化 */
+  :deep(.main-content-body p) {
+    text-indent: 1.5em !important;
+    margin-bottom: 1rem;
+  }
+
+  .back-btn {
+    top: 12px;
+    left: 12px;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
+
+  /* 轮播图移动端优化 */
+  :deep(.carousel) {
+    height: 300px;
+    margin: 16px 0;
+    border-radius: 8px;
+  }
+
+  :deep(.carousel-container img) {
+    height: 300px;
+  }
+
+  :deep(.carousel-dots) {
+    bottom: 12px;
+    gap: 6px;
+  }
+
+  :deep(.dot) {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .article-detail-page {
+    padding: 130px 0px 16px;
+  }
+
+  .detail-layout {
+    gap: 8px;
+    padding-left: 0px;
+    padding-right: 0px;
+    align-items: center;
+  }
+
+  .sidebar {
+    max-width: 400px;
+  }
+
+  .main-content {
+    max-width: 400px;
+  }
+
+  .sidebar-card {
+    border-radius: 6px;
+  }
+
+  .cover-image {
+    height: 140px;
+  }
+
+  .info-content {
+    padding: 0.8rem 1rem 1rem;
+  }
+
+  .sidebar-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .author-bar {
+    padding-bottom: 0.8rem;
+  }
+
+  .author-avatar {
+    width: 36px;
+    height: 36px;
+    margin-right: 8px;
+  }
+
+  .author-nickname {
+    font-size: 0.9rem;
+  }
+
+  .pub-date {
+    font-size: 0.75rem;
+  }
+
+  .stats-bar {
+    gap: 1rem;
+    margin-top: 0.8rem;
+  }
+
+  .stat-item {
+    font-size: 0.85rem;
+  }
+
+  .content-card {
+    padding: 1.2rem 0.8rem;
+    border-radius: 6px;
+  }
+
+  .main-title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .main-content-body {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* 小屏幕段落优化 */
+  :deep(.main-content-body p) {
+    text-indent: 1.2em !important;
+    margin-bottom: 0.8rem;
+  }
+
+  .back-btn {
+    top: 8px;
+    left: 8px;
+    font-size: 0.85rem;
+    padding: 4px 8px;
+  }
+
+  /* 轮播图小屏幕优化 */
+  :deep(.carousel) {
+    height: 250px;
+    margin: 12px 0;
+    border-radius: 6px;
+  }
+
+  :deep(.carousel-container img) {
+    height: 250px;
+  }
+
+  :deep(.carousel-dots) {
+    bottom: 8px;
+    gap: 4px;
+  }
+
+  :deep(.dot) {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .sidebar {
+    /* 移动端触摸优化 */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .content-card {
+    /* 移动端触摸优化 */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* 增加触摸目标大小 */
+  .back-btn {
+    min-height: 44px;
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :deep(.dot) {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* 横屏模式优化 */
+@media (orientation: landscape) and (max-height: 600px) {
+  .article-detail-page {
+    padding-top: 80px;
+  }
+
+  .sidebar {
+    height: 70vh;
+    max-height: 70vh;
+  }
+
+  .cover-image {
+    height: 120px;
+  }
+
+  .info-content {
+    padding: 0.8rem 1rem 1rem;
+  }
+
+  .sidebar-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .author-bar {
+    padding-bottom: 0.6rem;
+  }
+
+  .stats-bar {
+    margin-top: 0.8rem;
+  }
+
+  .content-card {
+    padding: 1.5rem 2rem;
+  }
+
+  .main-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .main-content-body {
+    font-size: 1rem;
+  }
+}
+
+/* 高分辨率屏幕优化 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .cover-image,
+  .author-avatar,
+  :deep(.carousel-container img) {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* 减少动画效果（用户偏好） */
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-card,
+  .content-card,
+  :deep(.carousel-container),
+  :deep(.dot) {
+    transition: none;
+  }
+}
+
+/* 打印样式优化 */
+@media print {
+  .article-detail-page {
+    padding: 0;
+    background: white;
+  }
+
+  .detail-layout {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .sidebar {
+    position: static;
+    height: auto;
+    max-height: none;
+  }
+
+  .back-btn {
+    display: none;
+  }
+
+  .content-card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+
+  :deep(.carousel) {
+    display: none;
+  }
+}
 </style>
