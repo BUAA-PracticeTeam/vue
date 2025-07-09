@@ -2,7 +2,6 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user.js'
-import { defineOptions } from 'vue'
 import { ElMessage } from 'element-plus'
 
 defineOptions({
@@ -136,7 +135,7 @@ const handleSignIn = async () => {
   })
 
   if (result.success) {
-    router.push('/about')
+    router.push('/')
   }
 }
 
