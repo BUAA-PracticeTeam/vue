@@ -76,55 +76,6 @@ const validateSignInForm = () => {
   return isValid
 }
 
-// 注册表单验证
-const validateSignUpForm = () => {
-  let isValid = true
-  signUpErrors.value = {
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  }
-
-  // 验证用户名
-  if (!signUpForm.value.username) {
-    signUpErrors.value.username = '请输入用户名'
-    isValid = false
-  } else if (signUpForm.value.username.length < 3) {
-    signUpErrors.value.username = '用户名长度不能少于3位'
-    isValid = false
-  }
-
-  // 验证邮箱
-  if (!signUpForm.value.email) {
-    signUpErrors.value.email = '请输入邮箱'
-    isValid = false
-  } else if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(signUpForm.value.email)) {
-    signUpErrors.value.email = '请输入有效的邮箱地址'
-    isValid = false
-  }
-
-  // 验证密码
-  if (!signUpForm.value.password) {
-    signUpErrors.value.password = '请输入密码'
-    isValid = false
-  } else if (signUpForm.value.password.length < 6) {
-    signUpErrors.value.password = '密码长度不能少于6位'
-    isValid = false
-  }
-
-  // 验证确认密码
-  if (!signUpForm.value.confirmPassword) {
-    signUpErrors.value.confirmPassword = '请确认密码'
-    isValid = false
-  } else if (signUpForm.value.password !== signUpForm.value.confirmPassword) {
-    signUpErrors.value.confirmPassword = '两次输入的密码不一致'
-    isValid = false
-  }
-
-  return isValid
-}
-
 // 登录处理
 const handleSignIn = async () => {
   if (!validateSignInForm()) return
@@ -271,6 +222,16 @@ const handleSignUp = async () => {
             <button class="btn" @click="toggleSignUp(true)">注册</button>
           </div>
         </div>
+      </div>
+
+      <!-- 移动端切换按钮 -->
+      <div class="mobile-toggle">
+        <button v-if="!isSignUpActive" class="mobile-toggle-btn" @click="toggleSignUp(true)">
+          没有账号？点击注册
+        </button>
+        <button v-else class="mobile-toggle-btn" @click="toggleSignUp(false)">
+          已有账号？点击登录
+        </button>
       </div>
     </div>
   </div>
@@ -529,6 +490,286 @@ const handleSignUp = async () => {
   100% {
     opacity: 1;
     z-index: 5;
+  }
+}
+
+/* 移动端切换按钮 - PC端隐藏 */
+.mobile-toggle {
+  display: none;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .authPage {
+    padding-top: 120px;
+    height: auto;
+    min-height: 100vh;
+    padding-bottom: 20px;
+  }
+
+  .container {
+    width: 90%;
+    max-width: 400px;
+    height: auto;
+    min-height: 400px;
+    top: 0;
+    border-radius: 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .container__form {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
+    transition: all 0.6s ease-in-out;
+  }
+
+  .container--signin {
+    left: 0;
+    width: 100%;
+    z-index: 2;
+    border-radius: 1rem;
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .container--signup {
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    border-radius: 1rem;
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  .container.right-panel-active .container--signin {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+
+  .container.right-panel-active .container--signup {
+    opacity: 1;
+    transform: translateX(0);
+    z-index: 5;
+  }
+
+  .container__overlay {
+    display: none;
+  }
+
+  .form {
+    padding: 2rem 1.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .form__title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .input {
+    padding: 0.8rem 0.8rem;
+    margin: 0.4rem 0;
+    font-size: 1rem;
+  }
+
+  .btn {
+    padding: 0.8rem 2rem;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
+
+  .link {
+    font-size: 0.85rem;
+    margin: 1rem 0;
+  }
+
+  .error-message {
+    font-size: 0.75rem;
+    margin: 0.1rem 0;
+  }
+
+  .mobile-toggle {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    position: absolute;
+    bottom: -60px;
+    left: 0;
+    right: 0;
+  }
+
+  .mobile-toggle-btn {
+    background: #0367a6;
+    border: none;
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.8rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+    box-shadow: 0 2px 8px rgba(3, 103, 166, 0.3);
+  }
+
+  .mobile-toggle-btn:hover {
+    background-color: #025a8f;
+  }
+}
+
+@media (max-width: 480px) {
+  .authPage {
+    padding-top: 100px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .container {
+    width: 95%;
+    max-width: 350px;
+    min-height: 350px;
+  }
+
+  .container__form {
+    height: 100%;
+  }
+
+  .form {
+    padding: 1.5rem 1rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .form__title {
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .input {
+    padding: 0.7rem 0.7rem;
+    margin: 0.3rem 0;
+    font-size: 0.95rem;
+  }
+
+  .btn {
+    padding: 0.7rem 1.8rem;
+    font-size: 0.85rem;
+    margin-top: 0.8rem;
+  }
+
+  .link {
+    font-size: 0.8rem;
+    margin: 0.8rem 0;
+  }
+
+  .error-message {
+    font-size: 0.7rem;
+  }
+
+  .mobile-toggle {
+    bottom: -50px;
+  }
+
+  .mobile-toggle-btn {
+    font-size: 0.85rem;
+    padding: 0.7rem 1.2rem;
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .btn {
+    /* 移动端触摸优化 */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    min-height: 44px;
+    min-width: 120px;
+  }
+
+  .input {
+    /* 移动端触摸优化 */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    min-height: 44px;
+  }
+
+  .btn:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .btn:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
+/* 横屏模式优化 */
+@media (orientation: landscape) and (max-height: 600px) {
+  .authPage {
+    padding-top: 20px;
+    padding-bottom: 10px;
+  }
+
+  .container {
+    min-height: 500px;
+  }
+
+  .container__form {
+    min-height: 200px;
+  }
+
+  .form {
+    padding: 1.5rem 1.5rem;
+    min-height: 200px;
+  }
+
+  .form__title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  .input {
+    padding: 0.6rem 0.6rem;
+    margin: 0.2rem 0;
+  }
+
+  .btn {
+    padding: 0.6rem 1.5rem;
+    margin-top: 0.8rem;
+  }
+}
+
+/* 高分辨率屏幕优化 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .authPage {
+    background-image: url('@/assets/img/mountain.png');
+    background-size: cover;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* 减少动画效果（用户偏好） */
+@media (prefers-reduced-motion: reduce) {
+  .container__form,
+  .container__overlay,
+  .overlay,
+  .overlay__panel,
+  .btn {
+    transition: none;
+  }
+
+  .btn:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .btn:active:not(:disabled) {
+    transform: none;
   }
 }
 </style>
