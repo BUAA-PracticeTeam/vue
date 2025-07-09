@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
@@ -7,6 +7,23 @@ import { artPublishService, artGetDetailService, artEditService } from '@/api/ar
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/user.js'
+
+// 移动端检测
+const isMobile = ref(false)
+const checkMobile = () => {
+  isMobile.value = window.innerWidth < 768
+}
+
+// 初始化检测
+onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+})
+
+// 清理事件监听器
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
+})
 // 控制抽屉显示隐藏
 const visibleDrawer = ref(false)
 
@@ -120,10 +137,15 @@ defineExpose({
     v-model="visibleDrawer"
     :title="formModel.id ? '编辑文章' : '添加文章'"
     direction="rtl"
-    size="50%"
+    :size="isMobile ? '100%' : '50%'"
   >
     <!-- 发表文章表单 -->
-    <el-form :model="formModel" ref="formRef" label-width="100px">
+    <el-form
+      :model="formModel"
+      ref="formRef"
+      :label-width="isMobile ? '80px' : '100px'"
+      class="article-form"
+    >
       <el-form-item label="文章标题" prop="title">
         <el-input v-model="formModel.title" placeholder="请输入标题"></el-input>
       </el-form-item>
@@ -152,15 +174,19 @@ defineExpose({
           ></quill-editor>
         </div>
       </el-form-item>
-      <el-form-item>
-        <el-button @click="onPublish('已发布')" type="primary">发布</el-button>
-        <el-button @click="onPublish('草稿')" type="info">草稿</el-button>
+      <el-form-item class="form-buttons">
+        <el-button @click="onPublish('已发布')" type="primary" size="large">发布</el-button>
+        <el-button @click="onPublish('草稿')" type="info" size="large">草稿</el-button>
       </el-form-item>
     </el-form>
   </el-drawer>
 </template>
 
 <style lang="scss" scoped>
+.article-form {
+  padding: 20px;
+}
+
 .avatar-uploader {
   :deep() {
     .avatar {
@@ -193,6 +219,161 @@ defineExpose({
   width: 100%;
   :deep(.ql-editor) {
     min-height: 200px;
+  }
+}
+
+.form-buttons {
+  margin-top: 30px;
+
+  .el-button {
+    margin-right: 15px;
+  }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .article-form {
+    padding: 15px;
+  }
+
+  .avatar-uploader {
+    :deep() {
+      .avatar {
+        width: 120px;
+        height: 120px;
+      }
+      .el-icon.avatar-uploader-icon {
+        width: 120px;
+        height: 120px;
+        font-size: 24px;
+      }
+    }
+  }
+
+  .editor {
+    :deep(.ql-editor) {
+      min-height: 150px;
+      font-size: 16px;
+    }
+
+    :deep(.ql-toolbar) {
+      padding: 8px;
+
+      .ql-formats {
+        margin-right: 8px;
+      }
+
+      .ql-picker {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .form-buttons {
+    margin-top: 20px;
+    text-align: center;
+
+    .el-button {
+      margin: 0 5px;
+      min-width: 80px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .article-form {
+    padding: 10px;
+  }
+
+  .avatar-uploader {
+    :deep() {
+      .avatar {
+        width: 100px;
+        height: 100px;
+      }
+      .el-icon.avatar-uploader-icon {
+        width: 100px;
+        height: 100px;
+        font-size: 20px;
+      }
+    }
+  }
+
+  .editor {
+    :deep(.ql-editor) {
+      min-height: 120px;
+      font-size: 15px;
+    }
+
+    :deep(.ql-toolbar) {
+      padding: 6px;
+
+      .ql-formats {
+        margin-right: 6px;
+      }
+
+      .ql-picker {
+        font-size: 13px;
+      }
+    }
+  }
+
+  .form-buttons {
+    margin-top: 15px;
+
+    .el-button {
+      margin: 0 3px;
+      min-width: 70px;
+      font-size: 14px;
+    }
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .avatar-uploader {
+    :deep() {
+      .el-upload {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+    }
+  }
+
+  .form-buttons {
+    .el-button {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      min-height: 44px;
+    }
+  }
+}
+
+/* 横屏模式优化 */
+@media (orientation: landscape) and (max-height: 600px) {
+  .article-form {
+    padding: 10px;
+  }
+
+  .editor {
+    :deep(.ql-editor) {
+      min-height: 100px;
+    }
+  }
+
+  .form-buttons {
+    margin-top: 15px;
+  }
+}
+
+/* 减少动画效果（用户偏好） */
+@media (prefers-reduced-motion: reduce) {
+  .avatar-uploader {
+    :deep() {
+      .el-upload {
+        transition: none;
+      }
+    }
   }
 }
 </style>

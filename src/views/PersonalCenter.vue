@@ -145,7 +145,7 @@ const closeMobileMenu = () => {
 
 <style lang="scss" scoped>
 .layout-container {
-  padding-top: 85px;
+  padding-top: 100px;
   height: 100vh;
 
   .el-aside {
@@ -215,7 +215,7 @@ const closeMobileMenu = () => {
 /* 移动端适配 */
 @media (max-width: 768px) {
   .layout-container {
-    padding-top: 120px;
+    padding-top: 140px;
 
     .pc-sidebar {
       display: none;
@@ -261,7 +261,7 @@ const closeMobileMenu = () => {
 
 @media (max-width: 480px) {
   .layout-container {
-    padding-top: 110px;
+    padding-top: 130px;
 
     .mobile-sidebar {
       width: 100vw;
@@ -314,7 +314,7 @@ const closeMobileMenu = () => {
 /* 横屏模式优化 */
 @media (orientation: landscape) and (max-height: 600px) {
   .layout-container {
-    padding-top: 100px;
+    padding-top: 110px;
 
     .el-aside__logo {
       padding-top: 60px;
