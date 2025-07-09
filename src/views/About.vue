@@ -796,6 +796,8 @@ export default defineComponent({
 
   .user-title {
     font-size: 0.7rem;
+  }
+}
 @media (max-width: 1024px) {
   .container {
     width: 85%;
