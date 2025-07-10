@@ -87,7 +87,7 @@ export default defineComponent({
       <!-- 第二行：版权信息 -->
       <div class="copyright">
         <p>© 2025 蒲公英-乡野航迹实践队 版权所有</p>
-        <p>© 技术：CircleCoder</p>
+        <p>© 技术：M.O.O.N团队</p>
       </div>
     </div>
   </footer>
