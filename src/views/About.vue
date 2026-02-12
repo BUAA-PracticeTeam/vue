@@ -19,6 +19,7 @@ export default defineComponent({
       new URL('@/assets/img/aboutBG2.jpg', import.meta.url).href,
     ]
     const footprints = [
+      '2026年1月，赴湖南省绥宁县支教、调研',
       '2025年7月，赴云南省大理市支教、调研',
       '2025年1月，赴湖北省恩施州社会调研',
       '2024年7月，赴贵州省黔东南苗族侗族自治州乡村支教',
@@ -172,6 +173,7 @@ export default defineComponent({
             { name: '山东省', itemStyle: { areaColor: '#42a5f5' } },
             { name: '甘肃省', itemStyle: { areaColor: '#42a5f5' } },
             { name: '广东省', itemStyle: { areaColor: '#42a5f5' } },
+            { name: '湖南省', itemStyle: { areaColor: '#42a5f5' } },
           ],
         },
         series: [
@@ -525,9 +527,10 @@ export default defineComponent({
 .footprint-list {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   gap: 1.2rem;
   min-width: 260px;
+  max-height: 400px;
+  overflow-y: auto;
   text-align: left;
 }
 
