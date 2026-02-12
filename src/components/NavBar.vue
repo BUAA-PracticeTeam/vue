@@ -74,7 +74,7 @@ watch(
     <div class="container header-container">
       <router-link to="/" class="logo">
         <img src="/logo.png" alt="Logo" class="logo-img" />
-        <span>蒲公英-乡野航迹实践队</span>
+        <span class="team-name">蒲公英-乡野航迹实践队</span>
       </router-link>
       <nav>
         <!-- 宽屏菜单 -->
@@ -301,6 +301,35 @@ nav .mobile-nav-menu li a.router-link-exact-active:after {
 
   .nav-right {
     display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .team-name {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1rem;
+  }
+
+  .logo-img {
+    width: 25px;
+    height: 25px;
+  }
+
+  .team-name {
+    font-size: 1rem;
+  }
+
+  .menu-toggle {
+    font-size: 1rem;
   }
 }
 </style>
