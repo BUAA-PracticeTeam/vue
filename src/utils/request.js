@@ -1,11 +1,12 @@
 import axios from 'axios'
 // const baseURL = 'http://big-event-vue-api-t.itheima.net'
-const baseURL = 'http://127.0.0.1:8000'
+// const baseURL = 'http://127.0.0.1:8000'
+const baseURL = 'http://47.93.81.21:8000'
 
 const instance = axios.create({
   // TODO 1. 基础地址，超时时间
   baseURL,
-  timeout: 10000,
+  timeout: 60000, // 增加到60秒，匹配后端超时时间
 })
 
 // // 请求拦截器

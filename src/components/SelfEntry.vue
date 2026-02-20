@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import {UserOutlined, LogoutOutlined, DownOutlined} from '@ant-design/icons-vue'
-import {computed, onMounted, ref} from 'vue'
-import {Dropdown, Menu, message} from 'ant-design-vue'
-import {useUserStore} from '@/stores/modules/user.js'
-import {useRouter} from "vue-router";
+import { UserOutlined, LogoutOutlined, DownOutlined } from '@ant-design/icons-vue'
+import { computed, onMounted, ref } from 'vue'
+import { Dropdown, Menu, message } from 'ant-design-vue'
+import { useUserStore } from '@/stores/user.js'
+import { useRouter } from 'vue-router'
 
 const ADropdown = Dropdown
 const AMenu = Menu
@@ -12,9 +12,10 @@ const AMenuDivider = Menu.Divider
 
 const userStore = useUserStore()
 const router = useRouter()
-const DEFAULT_AVATAR = 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg'
-const avatarUrl = computed(() =>
-  userStore.user.avatar || DEFAULT_AVATAR // ✅ 自动追踪 user.avatar 变化
+const DEFAULT_AVATAR =
+  'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg'
+const avatarUrl = computed(
+  () => userStore.user.avatar || DEFAULT_AVATAR, // ✅ 自动追踪 user.avatar 变化
 )
 
 const dropdownVisible = ref(false)
@@ -51,9 +52,10 @@ const handleLogoutClick = () => {
   if (userStore.user && userStore.user.username) {
     message.success('退出登录')
     userStore.clearUser() // 清除用户信息
-    router.push('/about') // 跳转到登录页
+    router.push('/') // 跳转到首页
   } else {
     message.warning('当前未登录')
+    router.push('/login') // 跳转到登录页
   }
 }
 
@@ -74,10 +76,10 @@ onMounted(() => {
       >
         <div class="avatar-trigger">
           <div class="avatar-container">
-            <img class="avatar-image" :src="avatarUrl" alt="用户头像"/>
+            <img class="avatar-image" :src="avatarUrl" alt="用户头像" />
           </div>
           <span class="username">{{ userStore.user?.nickname || '用户' }}</span>
-          <DownOutlined class="dropdown-icon"/>
+          <DownOutlined class="dropdown-icon" />
         </div>
 
         <template #overlay>
@@ -88,14 +90,15 @@ onMounted(() => {
           >
             <a-menu class="dropdown-menu">
               <a-menu-item key="profile" @click="handleProfileClick">
-                <UserOutlined/>
+                <UserOutlined />
                 <span>个人中心</span>
               </a-menu-item>
 
-              <a-menu-divider/>
+              <a-menu-divider />
               <a-menu-item key="logout" @click="handleLogoutClick">
-                <LogoutOutlined/>
-                <span>退出登录</span>
+                <LogoutOutlined />
+                <span v-if="userStore.user && userStore.user.username">退出登录</span>
+                <span v-else>登录/注册</span>
               </a-menu-item>
             </a-menu>
           </div>
@@ -187,8 +190,9 @@ onMounted(() => {
   min-width: 140px;
   border-radius: 8px;
   padding: 8px 0;
-  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08),
-  0 3px 6px -4px rgba(0, 0, 0, 0.12),
-  0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    0 3px 6px -4px rgba(0, 0, 0, 0.12),
+    0 9px 28px 8px rgba(0, 0, 0, 0.05);
 }
 </style>

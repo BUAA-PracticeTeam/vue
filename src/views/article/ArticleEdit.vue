@@ -1,26 +1,38 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import {
-  artPublishService,
-  artGetDetailService,
-  artEditService
-} from '@/api/article'
-import { baseURL } from '@/utils/request'
+import { artPublishService, artGetDetailService, artEditService } from '@/api/article'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import { useUserStore } from '@/stores/user.js'
+
+// 移动端检测
+const isMobile = ref(false)
+const checkMobile = () => {
+  isMobile.value = window.innerWidth < 768
+}
+
+// 初始化检测
+onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+})
+
+// 清理事件监听器
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
+})
 // 控制抽屉显示隐藏
 const visibleDrawer = ref(false)
 
 // 默认数据
 const defaultForm = {
+  id: '', // 新增id字段，保证编辑时有id
   title: '', // 标题
-  cate_id: '', // 分类id
-  cover_img: '', // 封面图片 file 对象
   content: '', // string 内容
-  state: '' // 状态
+  state: '', // 状态
 }
 
 // 准备数据
@@ -46,6 +58,10 @@ const onPublish = async (state) => {
   for (let key in formModel.value) {
     fd.append(key, formModel.value[key])
   }
+
+  // 新增：加上当前用户名
+  const userStore = useUserStore()
+  fd.append('username', userStore.user.username)
 
   // 发请求
   if (formModel.value.id) {
@@ -75,19 +91,14 @@ const open = async (row) => {
   if (row.id) {
     // 需要基于 row.id 发送请求，获取编辑对应的详情数据，进行回显
     const res = await artGetDetailService(row.id)
-    formModel.value = res.data.data
-    // 图片需要单独处理回显
-    imgUrl.value = baseURL + formModel.value.cover_img
-    // 注意：提交给后台，需要的数据格式，是file对象格式
-    // 需要将网络图片地址 => 转换成 file对象，存储起来, 将来便于提交
-    const file = await imageUrlToFileObject(
-      imgUrl.value,
-      formModel.value.cover_img
-    )
+    // 合并defaultForm和后端返回，保证id字段不丢失
+    formModel.value = { ...defaultForm, ...res.data.data }
+    formModel.value.cover_img = res.data.data.cover
+    imgUrl.value = formModel.value.cover_img
+    const file = await imageUrlToFileObject(imgUrl.value, 'cover.jpg')
     formModel.value.cover_img = file
   } else {
-    formModel.value = { ...defaultForm } // 基于默认的数据，重置form数据
-    // 这里重置了表单的数据，但是图片上传img地址，富文本编辑器内容 => 需要手动重置
+    formModel.value = { ...defaultForm }
     imgUrl.value = ''
     editorRef.value.setHTML('')
   }
@@ -101,12 +112,12 @@ async function imageUrlToFileObject(imageUrl, filename) {
 
     // 将下载的数据转换成 Blob 对象
     const blob = new Blob([response.data], {
-      type: response.headers['content-type']
+      type: response.headers['content-type'],
     })
 
     // 创建 File 对象
     const file = new File([blob], filename, {
-      type: response.headers['content-type']
+      type: response.headers['content-type'],
     })
 
     return file
@@ -117,7 +128,7 @@ async function imageUrlToFileObject(imageUrl, filename) {
 }
 
 defineExpose({
-  open
+  open,
 })
 </script>
 
@@ -126,18 +137,17 @@ defineExpose({
     v-model="visibleDrawer"
     :title="formModel.id ? '编辑文章' : '添加文章'"
     direction="rtl"
-    size="50%"
+    :size="isMobile ? '100%' : '50%'"
   >
     <!-- 发表文章表单 -->
-    <el-form :model="formModel" ref="formRef" label-width="100px">
+    <el-form
+      :model="formModel"
+      ref="formRef"
+      :label-width="isMobile ? '80px' : '100px'"
+      class="article-form"
+    >
       <el-form-item label="文章标题" prop="title">
         <el-input v-model="formModel.title" placeholder="请输入标题"></el-input>
-      </el-form-item>
-      <el-form-item label="文章分类" prop="cate_id">
-        <channel-select
-          v-model="formModel.cate_id"
-          width="100%"
-        ></channel-select>
       </el-form-item>
       <el-form-item label="文章封面" prop="cover_img">
         <!-- 此处需要关闭 element-plus 的自动上传，不需要配置 action 等参数
@@ -164,15 +174,19 @@ defineExpose({
           ></quill-editor>
         </div>
       </el-form-item>
-      <el-form-item>
-        <el-button @click="onPublish('已发布')" type="primary">发布</el-button>
-        <el-button @click="onPublish('草稿')" type="info">草稿</el-button>
+      <el-form-item class="form-buttons">
+        <el-button @click="onPublish('已发布')" type="primary" size="large">发布</el-button>
+        <el-button @click="onPublish('草稿')" type="info" size="large">草稿</el-button>
       </el-form-item>
     </el-form>
   </el-drawer>
 </template>
 
 <style lang="scss" scoped>
+.article-form {
+  padding: 20px;
+}
+
 .avatar-uploader {
   :deep() {
     .avatar {
@@ -205,6 +219,161 @@ defineExpose({
   width: 100%;
   :deep(.ql-editor) {
     min-height: 200px;
+  }
+}
+
+.form-buttons {
+  margin-top: 30px;
+
+  .el-button {
+    margin-right: 15px;
+  }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .article-form {
+    padding: 15px;
+  }
+
+  .avatar-uploader {
+    :deep() {
+      .avatar {
+        width: 120px;
+        height: 120px;
+      }
+      .el-icon.avatar-uploader-icon {
+        width: 120px;
+        height: 120px;
+        font-size: 24px;
+      }
+    }
+  }
+
+  .editor {
+    :deep(.ql-editor) {
+      min-height: 150px;
+      font-size: 16px;
+    }
+
+    :deep(.ql-toolbar) {
+      padding: 8px;
+
+      .ql-formats {
+        margin-right: 8px;
+      }
+
+      .ql-picker {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .form-buttons {
+    margin-top: 20px;
+    text-align: center;
+
+    .el-button {
+      margin: 0 5px;
+      min-width: 80px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .article-form {
+    padding: 10px;
+  }
+
+  .avatar-uploader {
+    :deep() {
+      .avatar {
+        width: 100px;
+        height: 100px;
+      }
+      .el-icon.avatar-uploader-icon {
+        width: 100px;
+        height: 100px;
+        font-size: 20px;
+      }
+    }
+  }
+
+  .editor {
+    :deep(.ql-editor) {
+      min-height: 120px;
+      font-size: 15px;
+    }
+
+    :deep(.ql-toolbar) {
+      padding: 6px;
+
+      .ql-formats {
+        margin-right: 6px;
+      }
+
+      .ql-picker {
+        font-size: 13px;
+      }
+    }
+  }
+
+  .form-buttons {
+    margin-top: 15px;
+
+    .el-button {
+      margin: 0 3px;
+      min-width: 70px;
+      font-size: 14px;
+    }
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .avatar-uploader {
+    :deep() {
+      .el-upload {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+    }
+  }
+
+  .form-buttons {
+    .el-button {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      min-height: 44px;
+    }
+  }
+}
+
+/* 横屏模式优化 */
+@media (orientation: landscape) and (max-height: 600px) {
+  .article-form {
+    padding: 10px;
+  }
+
+  .editor {
+    :deep(.ql-editor) {
+      min-height: 100px;
+    }
+  }
+
+  .form-buttons {
+    margin-top: 15px;
+  }
+}
+
+/* 减少动画效果（用户偏好） */
+@media (prefers-reduced-motion: reduce) {
+  .avatar-uploader {
+    :deep() {
+      .el-upload {
+        transition: none;
+      }
+    }
   }
 }
 </style>

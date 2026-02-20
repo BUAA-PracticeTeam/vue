@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { defineOptions } from 'vue'
 
 // 设置组件名称
 defineOptions({
@@ -14,19 +13,19 @@ const showEditor = ref(false)
 const posts = ref([
   {
     id: 1,
-    author: '张明',
+    author: '袁子轩',
     title: '暑期支教活动招募志愿者',
     content:
       '我们计划在7月15日至7月30日前往贵州省某小学开展支教活动，现招募志愿者10名，欢迎报名参加！',
-    date: new Date(2023, 5, 10),
+    date: new Date(2025, 5, 10),
     likes: 15,
   },
   {
     id: 2,
-    author: '李华',
+    author: '袁子轩',
     title: '环保宣传活动总结',
     content: '上周六在中央公园开展的环保宣传活动非常成功，感谢所有参与的队员和市民朋友！',
-    date: new Date(2023, 5, 5),
+    date: new Date(2025, 5, 5),
     likes: 8,
   },
 ])
@@ -134,6 +133,10 @@ const formatDate = (date) => {
           </div>
         </div>
       </div>
+    </div>
+    <!-- 模糊遮罩仅覆盖论坛内容 -->
+    <div class="forum-blur-mask">
+      <div class="forum-blur-tip">论坛功能待完善</div>
     </div>
   </div>
 </template>
@@ -384,5 +387,30 @@ const formatDate = (date) => {
 .slide-up-leave-to {
   transform: translateY(20px);
   opacity: 0;
+}
+
+.forum-blur-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 86%;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+}
+.forum-blur-tip {
+  font-size: 2.2rem;
+  color: #2989d8;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 2.5rem 4rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  border: 2px solid #ffcc00;
 }
 </style>
