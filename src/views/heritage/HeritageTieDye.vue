@@ -38,6 +38,29 @@ const sections = ref([
     layout: 'left'
   }
 ])
+
+const references = ref([
+  {
+    text: '扎染-百度百科',
+    url: 'https://baike.baidu.com/item/%E6%89%8E%E6%9F%93/2660805#2'
+  },
+  {
+    text: '白族扎染技艺-百度百科',
+    url: 'https://baike.baidu.com/item/%E7%99%BD%E6%97%8F%E6%89%8E%E6%9F%93%E6%8A%80%E8%89%BA/5852309#1'
+  },
+  {
+    text: '白族扎染技艺-中国非物质文化遗产网',
+    url: 'https://www.ihchina.cn/project_details/14304.html'
+  },
+  {
+    text: '白族扎染技艺-云南非物质文化遗产保护网',
+    url: 'https://www.ynich.cn/item/148.html'
+  },
+  {
+    text: '資治通鑒 (胡三省音注) / 卷232-维基文库',
+    url: 'https://zh.wikisource.org/wiki/%E8%B3%87%E6%B2%BB%E9%80%9A%E9%91%92_(%E8%83%A1%E4%B8%89%E7%9C%81%E9%9F%B3%E6%B3%A8)/%E5%8D%B7232'
+  }
+])
 </script>
 
 <template>
@@ -67,6 +90,40 @@ const sections = ref([
         </div>
       </div>
     </section>
+
+    <section class="scroll-section footer-section">
+      <div class="footer-card">
+        <h3>参考资料与创作声明</h3>
+
+        <div class="footer-content">
+          <div class="reference-group">
+            <h4>参考资料</h4>
+            <ul>
+              <li v-for="(refItem, index) in references" :key="index">
+                <a
+                  v-if="refItem.url"
+                  :href="refItem.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  [{{ index + 1 }}] {{ refItem.text }}
+                </a>
+                <span v-else>
+                  [{{ index + 1 }}] {{ refItem.text }}
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="copyright-group">
+            <h4>创作声明</h4>
+            <p>本文案由“蒲公英-乡野航迹实践队”原创整理，部分内容由AI生成。</p>
+            <p>部分图片来源于网络，仅作非遗公益展示，如有侵权请联系删除。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </div>
 </template>
 
@@ -177,6 +234,81 @@ const sections = ref([
   flex-direction: row-reverse;
 }
 
+.footer-section {
+  background-color: #f5f7fa;
+}
+
+.footer-card {
+  width: 80%;
+  max-width: 800px;
+  background: white;
+  padding: 60px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  text-align: center;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.footer-card h3 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 40px;
+  position: relative;
+  display: inline-block;
+}
+
+.footer-card h3::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background-color: #005BAC;
+  margin: 15px auto 0;
+}
+
+.footer-content {
+  text-align: left;
+  color: #555;
+}
+
+.reference-group, .copyright-group {
+  margin-bottom: 30px;
+}
+
+.footer-content h4 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 15px;
+  border-left: 4px solid #005BAC;
+  padding-left: 10px;
+}
+
+.reference-group ul {
+  list-style: none;
+  padding: 0;
+}
+
+.reference-group li {
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.reference-group li a {
+  color: #005BAC;
+  text-decoration: none;
+}
+
+.reference-group li a:hover {
+  text-decoration: underline;
+}
+
+.copyright-group p {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
 @keyframes bounce {
   0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
   40% {transform: translateX(-50%) translateY(-10px);}
@@ -226,6 +358,25 @@ const sections = ref([
   .text-wrapper p {
     font-size: 1rem;
     line-height: 1.6;
+  }
+
+  .footer-card {
+    width: 90%;
+    padding: 30px 20px;
+    max-height: 85vh;
+  }
+
+  .footer-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+  }
+
+  .footer-content h4 {
+    font-size: 1.1rem;
+  }
+
+  .reference-group li, .copyright-group p {
+    font-size: 0.9rem;
   }
 }
 </style>

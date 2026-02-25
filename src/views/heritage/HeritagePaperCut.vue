@@ -38,6 +38,21 @@ const sections = ref([
     layout: 'left'
   }
 ])
+
+const references = ref([
+  {
+    text: '剪纸（苗族剪纸）-百度百科',
+    url: 'https://baike.baidu.com/item/%E5%89%AA%E7%BA%B8%EF%BC%88%E8%8B%97%E6%97%8F%E5%89%AA%E7%BA%B8%EF%BC%89/54050607'
+  },
+  {
+    text: '苗疆纸艺——黔东南苗族剪纸艺术专题展-黔东南博物馆',
+    url: 'http://www.qdnzmb.com/linshizhanlan/248.html'
+  },
+  {
+    text: '湖南绥宁：苗家剪纸进校园，开出最美“非遗传承之花”-央广网',
+    url: 'https://news.cnr.cn/local/dftj/20240115/t20240115_526558853.shtml'
+  }
+])
 </script>
 
 <template>
@@ -67,6 +82,40 @@ const sections = ref([
         </div>
       </div>
     </section>
+
+    <section class="scroll-section footer-section">
+      <div class="footer-card">
+        <h3>参考资料与创作声明</h3>
+
+        <div class="footer-content">
+          <div class="reference-group">
+            <h4>参考资料</h4>
+            <ul>
+              <li v-for="(refItem, index) in references" :key="index">
+                <a
+                  v-if="refItem.url"
+                  :href="refItem.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  [{{ index + 1 }}] {{ refItem.text }}
+                </a>
+                <span v-else>
+                  [{{ index + 1 }}] {{ refItem.text }}
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="copyright-group">
+            <h4>创作声明</h4>
+            <p>本文案由“蒲公英-乡野航迹实践队”原创整理，部分内容由AI生成。</p>
+            <p>部分图片来源于网络，仅作非遗公益展示，如有侵权请联系删除。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </div>
 </template>
 
@@ -177,6 +226,81 @@ const sections = ref([
   flex-direction: row-reverse;
 }
 
+.footer-section {
+  background-color: #f5f7fa;
+}
+
+.footer-card {
+  width: 80%;
+  max-width: 800px;
+  background: white;
+  padding: 60px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  text-align: center;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.footer-card h3 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 40px;
+  position: relative;
+  display: inline-block;
+}
+
+.footer-card h3::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background-color: #c0392b;
+  margin: 15px auto 0;
+}
+
+.footer-content {
+  text-align: left;
+  color: #555;
+}
+
+.reference-group, .copyright-group {
+  margin-bottom: 30px;
+}
+
+.footer-content h4 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 15px;
+  border-left: 4px solid #c0392b;
+  padding-left: 10px;
+}
+
+.reference-group ul {
+  list-style: none;
+  padding: 0;
+}
+
+.reference-group li {
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.reference-group li a {
+  color: #c0392b;
+  text-decoration: none;
+}
+
+.reference-group li a:hover {
+  text-decoration: underline;
+}
+
+.copyright-group p {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
 @keyframes bounce {
   0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
   40% {transform: translateX(-50%) translateY(-10px);}
@@ -226,6 +350,25 @@ const sections = ref([
   .text-wrapper p {
     font-size: 1rem;
     line-height: 1.6;
+  }
+
+  .footer-card {
+    width: 90%;
+    padding: 30px 20px;
+    max-height: 85vh;
+  }
+
+  .footer-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+  }
+
+  .footer-content h4 {
+    font-size: 1.1rem;
+  }
+
+  .reference-group li, .copyright-group p {
+    font-size: 0.9rem;
   }
 }
 </style>
