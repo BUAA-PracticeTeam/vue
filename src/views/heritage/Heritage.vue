@@ -9,8 +9,6 @@ const navigateTo = (path: string) => {
 </script>
 
 <template>
-  <!-- TODO: 替换占位图片 -->
-
   <div class="heritage-menu-container">
     <div class="header-section">
       <h1>非遗介绍</h1>
@@ -20,7 +18,7 @@ const navigateTo = (path: string) => {
     <div class="cards-wrapper">
       <div class="heritage-card" @click="navigateTo('/heritage/tie-dye')">
         <div class="card-image">
-          <img src="https://placehold.co/600x400/005BAC/ffffff?text=Tie-Dye" alt="扎染" />
+          <img src="/src/assets/img/heritage/tie-dye/hero.jpg" alt="扎染" />
         </div>
         <div class="card-info">
           <h2>巍山扎染</h2>
@@ -31,11 +29,11 @@ const navigateTo = (path: string) => {
 
       <div class="heritage-card" @click="navigateTo('/heritage/paper-cut')">
         <div class="card-image">
-          <img src="https://placehold.co/600x400/c0392b/ffffff?text=Paper-Cut" alt="剪纸" />
+          <img src="/src/assets/img/heritage/paper-cut/hero.jpg" alt="剪纸" />
         </div>
         <div class="card-info">
           <h2>苗族剪纸</h2>
-          <p>苗族文化的活化石，以独有的锯齿纹与细腻线条，刻画万物有灵的巫傩奇境 。一剪一刻，皆是先民对自然与生命的极致礼赞 。</p>
+          <p>苗族文化的活化石，以独有的锯齿纹与细腻线条，刻画万物有灵的巫傩奇境。一剪一刻，皆是先民对自然与生命的极致礼赞。</p>
           <span class="btn-explore">点击探索 &rarr;</span>
         </div>
       </div>
