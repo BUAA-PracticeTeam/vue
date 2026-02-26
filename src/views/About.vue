@@ -17,6 +17,8 @@ export default defineComponent({
     const aboutImages = [
       new URL('@/assets/img/aboutBG.png', import.meta.url).href,
       new URL('@/assets/img/aboutBG2.jpg', import.meta.url).href,
+      new URL('@/assets/img/aboutBG3.jpg', import.meta.url).href,
+      new URL('@/assets/img/aboutBG4.jpg', import.meta.url).href,
     ]
     const footprints = [
       '2026年1月，赴湖南省绥宁县支教、调研',
