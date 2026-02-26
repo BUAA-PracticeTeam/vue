@@ -88,6 +88,9 @@ watch(
           <li>
             <router-link to="/gallery">精彩回顾</router-link>
           </li>
+          <li>
+            <router-link to="/heritage">非遗介绍</router-link>
+          </li>
           <!-- <li>
             <router-link to="/forum">交流论坛</router-link>
           </li> -->
@@ -114,6 +117,9 @@ watch(
             </li>
             <li>
               <router-link to="/gallery" @click="toggleMobileMenu">精彩回顾</router-link>
+            </li>
+            <li>
+              <router-link to="/heritage" @click="toggleMobileMenu">非遗介绍</router-link>
             </li>
             <!-- <li>
               <router-link to="/forum" @click="toggleMobileMenu">交流论坛</router-link>

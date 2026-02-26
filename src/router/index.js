@@ -47,6 +47,22 @@ const router = createRouter({
       meta: { title: '画廊 - BUAA Practice Team' },
     },
     {
+      path: '/heritage',
+      name: 'HeritagePage',
+      component: () => import('../views/heritage/Heritage.vue'),
+      meta: { title: '非遗 - BUAA Practice Team' },
+    },
+    {
+      path: '/heritage/tie-dye',
+      name: 'HeritageTieDye',
+      component: () => import('../views/heritage/HeritageTieDye.vue')
+    },
+    {
+      path: '/heritage/paper-cut',
+      name: 'HeritagePaperCut',
+      component: () => import('../views/heritage/HeritagePaperCut.vue')
+    },
+    {
       path: '/forum',
       name: 'ForumPage',
       component: Forum,
