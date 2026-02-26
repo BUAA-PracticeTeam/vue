@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import rightArrowSvg from '@/assets/svg/right-arrow.svg?raw'
+import tieDyeHero from '@/assets/img/heritage/tie-dye/hero.jpg'
+import paperCutHero from '@/assets/img/heritage/paper-cut/hero.jpg'
 
 const router = useRouter()
 
@@ -19,7 +21,7 @@ const navigateTo = (path: string) => {
     <div class="cards-wrapper">
       <div class="heritage-card" @click="navigateTo('/heritage/tie-dye')">
         <div class="card-image">
-          <img src="/src/assets/img/heritage/tie-dye/hero.jpg" alt="扎染" />
+          <img :src="tieDyeHero" alt="扎染" />
         </div>
         <div class="card-info">
           <h2>巍山扎染</h2>
@@ -33,7 +35,7 @@ const navigateTo = (path: string) => {
 
       <div class="heritage-card" @click="navigateTo('/heritage/paper-cut')">
         <div class="card-image">
-          <img src="/src/assets/img/heritage/paper-cut/hero.jpg" alt="剪纸" />
+          <img :src="paperCutHero" alt="剪纸" />
         </div>
         <div class="card-info">
           <h2>苗族剪纸</h2>
