@@ -16,9 +16,9 @@ import { defineComponent, computed } from 'vue'
 export default defineComponent({
   name: 'ImageCarousel',
   setup() {
-    // 精选的5张高质量图片
+    // 精选的高质量图片
     const images = [
-      'https://circlecoder05.oss-cn-beijing.aliyuncs.com/test/202507062001254.JPG',
+      // 'https://circlecoder05.oss-cn-beijing.aliyuncs.com/test/202507062001254.JPG',
       'https://circlecoder05.oss-cn-beijing.aliyuncs.com/test/202507062002062.JPG',
       'https://circlecoder05.oss-cn-beijing.aliyuncs.com/test/202507062003892.JPG',
       'https://circlecoder05.oss-cn-beijing.aliyuncs.com/test/202507062003464.JPG',
