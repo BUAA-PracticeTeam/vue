@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import downArrowSvg from '@/assets/svg/down-arrow.svg?raw'
 
 const sections = ref([
   {
@@ -69,7 +70,11 @@ const references = ref([
       <div class="hero-content">
         <h1>巍山扎染</h1>
         <p class="hero-subtitle">苍洱流蓝，布里生花</p>
-        <div class="scroll-tip">向下滑动探索 <br/> &darr;</div>
+        <div class="scroll-tip">
+          向下滑动探索
+          <br />
+          <span class="scroll-tip-icon" v-html="downArrowSvg" aria-hidden="true"></span>
+        </div>
       </div>
     </section>
 
@@ -173,6 +178,17 @@ const references = ref([
   transform: translateX(-50%);
   animation: bounce 2s infinite;
   opacity: 0.8;
+}
+
+.scroll-tip-icon {
+  display: inline-block;
+}
+
+.scroll-tip-icon :deep(svg) {
+  width: 0.95em;
+  height: 0.95em;
+  display: block;
+  color: currentColor;
 }
 
 .content-box {

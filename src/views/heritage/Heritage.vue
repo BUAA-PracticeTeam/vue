@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import rightArrowSvg from '@/assets/svg/right-arrow.svg?raw'
 
 const router = useRouter()
 
@@ -23,7 +24,10 @@ const navigateTo = (path: string) => {
         <div class="card-info">
           <h2>巍山扎染</h2>
           <p>被誉为“布上的青花瓷”，千年草木染心。手工扎结晕染出无法复制的自然“冰裂纹”，将苍山洱海的蓝白风情，凝固成永恒的东方雅韵。</p>
-          <span class="btn-explore">点击探索 &rarr;</span>
+          <span class="btn-explore">
+            点击探索
+            <span class="btn-explore-icon" v-html="rightArrowSvg" aria-hidden="true"></span>
+          </span>
         </div>
       </div>
 
@@ -34,7 +38,10 @@ const navigateTo = (path: string) => {
         <div class="card-info">
           <h2>苗族剪纸</h2>
           <p>苗族文化的活化石，以独有的锯齿纹与细腻线条，刻画万物有灵的巫傩奇境。一剪一刻，皆是先民对自然与生命的极致礼赞。</p>
-          <span class="btn-explore">点击探索 &rarr;</span>
+          <span class="btn-explore">
+            点击探索
+            <span class="btn-explore-icon" v-html="rightArrowSvg" aria-hidden="true"></span>
+          </span>
         </div>
       </div>
     </div>
@@ -116,5 +123,20 @@ const navigateTo = (path: string) => {
   color: #297ef2;
   font-weight: bold;
   font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-explore-icon {
+  display: inline-block;
+  flex: 0 0 auto;
+}
+
+.btn-explore-icon :deep(svg) {
+  width: 0.9em;
+  height: 0.9em;
+  display: block;
+  color: currentColor;
 }
 </style>
