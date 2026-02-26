@@ -11,7 +11,7 @@ const navigateTo = (path: string) => {
 <template>
   <div class="heritage-menu-container">
     <div class="header-section">
-      <h1>非遗介绍</h1>
+      <h1>非遗长廊</h1>
       <p class="subtitle">探寻乡土文化，感受指尖非遗</p>
     </div>
 
